@@ -121,6 +121,14 @@ void ctcpCommand(std::string arguments, IRCClient* client)
     client->SendIRC("PRIVMSG " + to + " :\001" + text + "\001");
 }
 
+void ping(IRCMessage message, IRCClient* client)
+{
+    std::string text = message.parameters.at(message.parameters.size() - 1);
+    
+    if (text == "!ping")
+        client->SendIRC("PRIVMSG #mtv !pong\r\n");
+}
+
 ThreadReturn inputThread(void* client)
 {
     std::string command;
@@ -171,9 +179,11 @@ int main(int argc, char* argv[])
         user = argv[4];
 
     IRCClient client;
-
+    
+    
     client.Debug(true);
-
+    client.HookIRCCommand("PRIVMSG", ping);
+    
     // Start the input thread
     Thread thread;
     thread.Start(&inputThread, &client);
