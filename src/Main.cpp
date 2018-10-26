@@ -121,12 +121,44 @@ void ctcpCommand(std::string arguments, IRCClient* client)
     client->SendIRC("PRIVMSG " + to + " :\001" + text + "\001");
 }
 
-void ping(IRCMessage message, IRCClient* client)
+void cmds(IRCMessage message, IRCClient* client)
 {
     std::string text = message.parameters.at(message.parameters.size() - 1);
-    
-    if (text == "!ping")
-        client->SendIRC("PRIVMSG #mtv !pong\r\n");
+    std::string act;
+    if (text[0] == '!')
+    {
+        std::string act = text.substr(1, text.find(" ") - 1);
+        std::string inp = text.substr(text.find(" ") + 1);
+        std::string usern = message.prefix.nick;
+        if (act == "d")
+        {
+            std::string s = text.substr(3);
+            std::stringstream trans(s);
+            int x = 0;
+            trans >> x;
+            srand(time(0));
+            int result = (1+(rand()%x));
+            std::string conv = std::to_string(result);
+            client->SendIRC("PRIVMSG #mtv :" + usern + " has rolled a " + conv + ".\r\n");
+        }
+        if (act == "ping")
+                client->SendIRC("PRIVMSG #mtv :Leave me alone..\r\n");
+        if (act == "choose") {
+            std::string answer;
+            std::string option1 = inp.substr(0, inp.find("or") - 1);
+            std::string option2 = inp.substr(inp.find("or") + 3);
+                
+            srand(time(0));
+            int i = (rand()%2);
+            if (i == 0)
+                answer = option1;
+            else
+                answer = option2;
+            client->SendIRC("PRIVMSG #mtv :" + answer + ".\r\n");
+        }
+                
+        return;
+    }
 }
 
 ThreadReturn inputThread(void* client)
@@ -182,7 +214,7 @@ int main(int argc, char* argv[])
     
     
     client.Debug(true);
-    client.HookIRCCommand("PRIVMSG", ping);
+    client.HookIRCCommand("PRIVMSG", &cmds);
     
     // Start the input thread
     Thread thread;
