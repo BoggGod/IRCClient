@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace ServerDetails
+namespace BotConfig
 {
 	char* Channel = "#botshitdos";    
 	int Port = 6660;

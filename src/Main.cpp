@@ -192,10 +192,10 @@ ThreadReturn inputThread(void* client)
 
 int main(int argc, char* argv[])
 {
-    char* host = ServerDetails::Host;
-    int port = ServerDetails::Port;
-    std::string nick(ServerDetails::Nickname);
-    std::string user(ServerDetails::User);
+    char* host = BotConfig::Host;
+    int port = BotConfig::Port;
+    std::string nick(BotConfig::Nickname);
+    std::string user(BotConfig::User);
 
 
     IRCClient client;
@@ -224,7 +224,7 @@ int main(int argc, char* argv[])
                 signal(SIGINT, signalHandler);
 
                 while (client.Connected() && running) {
-                    joinCommand(ServerDetails::Channel, &client);
+                    joinCommand(BotConfig::Channel, &client);
                     client.ReceiveData();
                 }
             }
