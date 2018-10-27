@@ -83,7 +83,7 @@ public:
     bool Connect(char* /*host*/, int /*port*/);
     void Disconnect();
     bool Connected() { return _socket.Connected(); };
-
+	bool SendPrivMsg(std::string destination, std::string data);
     bool SendIRC(std::string /*data*/);
 
     bool Login(std::string /*nick*/, std::string /*user*/, std::string /*password*/ = std::string());

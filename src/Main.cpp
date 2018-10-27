@@ -20,6 +20,8 @@
 #include <algorithm>
 #include "Thread.h"
 #include "IRCClient.h"
+#include "Commands.h"
+#include "config.h"
 
 volatile bool running;
 
@@ -124,7 +126,12 @@ void ctcpCommand(std::string arguments, IRCClient* client)
 void cmds(IRCMessage message, IRCClient* client)
 {
     std::string text = message.parameters.at(message.parameters.size() - 1);
+    std::string msgSender = message.parameters[0];
+    bool isChannel = msgSender[0] == '#';
     std::string act;
+
+    if (!isChannel) return;
+
     if (text[0] == '!')
     {
         std::string act = text.substr(1, text.find(" ") - 1);
@@ -137,26 +144,17 @@ void cmds(IRCMessage message, IRCClient* client)
             int x = 0;
             trans >> x;
             srand(time(0));
-            int result = (1+(rand()%x));
+            int result = (1 + (rand() % x));
             std::string conv = std::to_string(result);
             client->SendIRC("PRIVMSG #mtv :" + usern + " has rolled a " + conv + ".\r\n");
         }
         if (act == "ping")
-                client->SendIRC("PRIVMSG #mtv :Leave me alone..\r\n");
+            client->SendIRC("PRIVMSG #mtv :Leave me alone..\r\n");
         if (act == "choose") {
-            std::string answer;
-            std::string option1 = inp.substr(0, inp.find("or") - 1);
-            std::string option2 = inp.substr(inp.find("or") + 3);
-                
-            srand(time(0));
-            int i = (rand()%2);
-            if (i == 0)
-                answer = option1;
-            else
-                answer = option2;
-            client->SendIRC("PRIVMSG #mtv :" + answer + ".\r\n");
+            ChooseCommand* command = new ChooseCommand();
+            command->Execute(client, inp, msgSender);
         }
-                
+
         return;
     }
 }
@@ -194,28 +192,18 @@ ThreadReturn inputThread(void* client)
 
 int main(int argc, char* argv[])
 {
-    if (argc < 3)
-    {
-        std::cout << "Insuficient parameters: host port [nick] [user]" << std::endl;
-        return 1;
-    }
+    char* host = ServerDetails::Host;
+    int port = ServerDetails::Port;
+    std::string nick(ServerDetails::Nickname);
+    std::string user(ServerDetails::User);
 
-    char* host = argv[1];
-    int port = atoi(argv[2]);
-    std::string nick("MyIRCClient");
-    std::string user("IRCClient");
-
-    if (argc >= 4)
-        nick = argv[3];
-    if (argc >= 5)
-        user = argv[4];
 
     IRCClient client;
-    
-    
+
+
     client.Debug(true);
     client.HookIRCCommand("PRIVMSG", &cmds);
-    
+
     // Start the input thread
     Thread thread;
     thread.Start(&inputThread, &client);
@@ -235,8 +223,10 @@ int main(int argc, char* argv[])
                 running = true;
                 signal(SIGINT, signalHandler);
 
-                while (client.Connected() && running)
+                while (client.Connected() && running) {
+                    joinCommand(ServerDetails::Channel, &client);
                     client.ReceiveData();
+                }
             }
 
             if (client.Connected())

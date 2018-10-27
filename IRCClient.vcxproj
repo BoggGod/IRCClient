@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -13,18 +13,21 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7913B804-6B88-4F5E-A10D-34E665D8B3C4}</ProjectGuid>
     <RootNamespace>IRCClient</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -61,6 +64,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ChooseCommand.cpp" />
+    <ClCompile Include="src\Command.cpp" />
     <ClCompile Include="src\IRCClient.cpp" />
     <ClCompile Include="src\IRCHandler.cpp" />
     <ClCompile Include="src\IRCSocket.cpp" />
@@ -68,6 +73,10 @@
     <ClCompile Include="src\Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ChooseCommand.h" />
+    <ClInclude Include="src\Command.h" />
+    <ClInclude Include="src\Commands.h" />
+    <ClInclude Include="src\Config.h" />
     <ClInclude Include="src\IRCClient.h" />
     <ClInclude Include="src\IRCHandler.h" />
     <ClInclude Include="src\IRCSocket.h" />
