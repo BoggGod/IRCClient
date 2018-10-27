@@ -3,7 +3,7 @@
 
 void ChooseCommand::Execute(IRCClient* ircClient, std::string input, std::string channel) {
     const std::string orPattern = " or ";
-    std::string answer;
+
     std::vector <std::string > options;
     int orIndex = 1;
     std::string option = "";
