@@ -53,6 +53,12 @@ bool IRCClient::SendIRC(std::string data)
     return _socket.SendData(data.c_str());
 }
 
+bool IRCClient::SendPrivMsg(std::string destination, std::string data)
+{
+    std::string message = "PRIVMSG " + destination + " :" + data;
+    return this->SendIRC(message);
+}
+
 bool IRCClient::Login(std::string nick, std::string user, std::string password)
 {
     _nick = nick;

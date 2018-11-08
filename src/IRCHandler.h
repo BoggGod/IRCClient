@@ -17,8 +17,10 @@
 #define _IRCHANDLER_H
 
 #include "IRCClient.h"
+#include "Vars.h"
 
 #define NUM_IRC_CMDS 26
+
 
 struct IRCCommandHandler
 {

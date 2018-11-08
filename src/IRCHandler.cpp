@@ -14,6 +14,7 @@
  */
 
 #include "IRCHandler.h"
+using namespace Global;
 
 IRCCommandHandler ircCommandTable[NUM_IRC_CMDS] =
 {
@@ -114,6 +115,8 @@ void IRCClient::HandleChannelJoinPart(IRCMessage message)
     std::string channel = message.parameters.at(0);
     std::string action = message.command == "JOIN" ? "joins" : "leaves";
     std::cout << message.prefix.nick << " " << action << " " << channel << std::endl;
+    if (setinfos.find(message.prefix.nick) != setinfos.end())
+      SendIRC("PRIVMSG " + channel + " :" + message.prefix.nick + "'s setinfo: " + setinfos[message.prefix.nick]);
 }
 
 void IRCClient::HandleUserNickChange(IRCMessage message)

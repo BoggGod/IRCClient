@@ -85,6 +85,8 @@ public:
     bool Connected() { return _socket.Connected(); };
 
     bool SendIRC(std::string /*data*/);
+    bool SendPrivMsg(std::string destination, std::string data);
+    std::string printChannel();
 
     bool Login(std::string /*nick*/, std::string /*user*/, std::string /*password*/ = std::string());
 
@@ -107,6 +109,7 @@ public:
     void HandleServerMessage(IRCMessage /*message*/);
 
     void Debug(bool debug) { _debug = debug; };
+    
 
 private:
     void HandleCommand(IRCMessage /*message*/);
@@ -116,9 +119,11 @@ private:
 
     std::list<IRCCommandHook> _hooks;
 
+   
     std::string _nick;
     std::string _user;
-
+    std::string _channel;
+    
     bool _debug;
 };
 

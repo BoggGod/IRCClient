@@ -1,0 +1,47 @@
+# Compiler
+CC = g++
+
+# Extension
+SRCEXT=.cpp
+OBJEXT=.o
+
+# Directories and Files
+SOURCE_DIR =src
+SUB_DIR =src/CustomCommands
+SOURCE_FILES=$(shell find $(SOURCE_DIR) -maxdepth 1 -type f -name *.cpp)
+SUB_FILES=$(shell find $(SUB_DIR) -maxdepth 1 -type f -name *.cpp)
+define OBJECTS
+$(patsubst $(SOURCE_DIR)/%,$(OBJDIR)/%,$(SOURCE_FILES:.$(SRCEXT)=.$(OBJEXT)))
+$(patsubst $(SUB_DIR)/%,$(OBJDIR)/%,$(SUB_FILES:.$(SRCEXT)=.$(OBJEXT)))
+endef
+OBJDIR=obj
+TARGET=ircclient
+
+# Compiler Flags
+CXXFLAGS +=-std=c++11 -I$(SOURCE_DIR)
+CFLAGS =-c -Wall
+LDFLAGS =-lpthread
+
+#-------------------------------START-------------------------------#
+
+all: directories $(SOURCE_FILES) $(SUB_FILES) $(TARGET)
+
+directories:
+	@mkdir -p obj
+	@cp $(SOURCE_FILES) $(OBJDIR)
+	@cp $(SUB_FILES) $(OBJDIR)
+
+#$(OBJDIR)/%.o: $(OBJDIR)/%.cpp
+.cpp.o:
+	$(CC) $(CXXFLAGS)$ $(CFLAGS) $< -o $@
+
+$(TARGET): $(OBJECTS)
+	$(CC) -o $@ $(OBJECTS) $(LDFLAGS)
+
+.PHONY: clean
+
+clean:
+	@rm -rf $(OBJDIR) $(TARGET)
+
+test:
+	@echo $(OBJECTS)

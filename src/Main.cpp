@@ -14,20 +14,42 @@
  */
 #include <time.h>
 #include <iostream>
+#include <fstream>
 #include <signal.h>
 #include <cstdlib>
 #include <map>
 #include <algorithm>
 #include "Thread.h"
 #include "IRCClient.h"
+#include "Vars.h"
 #include <sstream>
 #include <string>
 #include <ctime>
 #include <limits>
+#include <cmath>
+#include "Commands.h"
+#include "Config.h"
+#include <chrono>
+#include <thread>
+#include <iterator>
+#include <vector>
+#include "Functions.h"
+
+using namespace Global;
 
 volatile bool running;
-int cnt = 0;
+
+std::time_t currtime;
+std::time_t daystart;
+std::time_t sixhcycle;
+std::time_t lastact;
+std::string chan;
+int annoyance = 0;
 std::string lastusr;
+std::map<std::string, int> bank;
+std::map<std::string, int> luck;
+std::map<std::string, std::pair<int, double>> loans;
+
 std::map<std::string, std::time_t> smokers;
 std::map<std::string, std::time_t> chefs;
 std::map<std::string, std::time_t> drinkers;
@@ -35,6 +57,9 @@ std::map<std::string, std::time_t> poppers;
 std::map<std::string, std::time_t> watchers;
 std::map<std::string, std::time_t> listeners;
 
+//flavor texts
+std::vector<std::pair<std::string, std::string>> insults;
+std::vector<std::pair<std::string, std::string>> leaves;
 
 void signalHandler(int signal)
 {
@@ -110,9 +135,9 @@ void msgCommand(std::string arguments, IRCClient* client)
 
 void joinCommand(std::string channel, IRCClient* client)
 {
-    if (channel[0] != '#')
+    if (channel[0] != '#') {
         channel = "#" + channel;
-
+    }
     client->SendIRC("JOIN " + channel);
 }
 
@@ -134,70 +159,163 @@ void ctcpCommand(std::string arguments, IRCClient* client)
     client->SendIRC("PRIVMSG " + to + " :\001" + text + "\001");
 }
 
+/*
+void luck_decay()
+{
+    for (auto &u : loans)
+    {
+        loans[w] -= ((loans[w] / 100) * 10);
+        
+        if w 
+    }
+    
+void interest()
+{
+}
+
+void newday()
+{
+    luck_decay();
+    interest();
+}
+
+void 
+*/
+
+/*std::string say(std::string response)
+{
+    std::string result;
+    result = "PRIVMSG " + chan + " :" + response + "\r\n";
+    return result;
+}
+*/
+
+void refMap(/* void */)
+{
+    for (std::map<std::string, std::time_t>::iterator it=watchers.begin(); it!=watchers.end(); ++it)
+    {
+        if (currtime - it->second >= 43200)
+            watchers.erase(it);
+    }
+        for (std::map<std::string, std::time_t>::iterator it=smokers.begin(); it!=smokers.end(); ++it)
+    {
+        if (currtime - it->second >= 43200)
+            smokers.erase(it);
+    }
+        for (std::map<std::string, std::time_t>::iterator it=drinkers.begin(); it!=drinkers.end(); ++it)
+    {
+        if (currtime - it->second >= 43200)
+            smokers.erase(it);
+    }
+    return;
+}
+
+
+void checktime(/* void */)
+{
+    if (currtime - daystart >= 86400)
+        daystart = currtime;
+    if (currtime - daystart >= 43200)
+    {
+        sixhcycle = currtime;
+        refMap();
+    }
+    return;
+}
+
+        
+    
+void annoyed(IRCClient* client, std::string &mischief)
+{
+    std::string response = "is an elbow muncher.";
+    mischief == lastusr ? ++annoyance : annoyance = 0;
+    if (annoyance >= 6) {
+        client->SendIRC("PRIVMSG " + chan + " :" + mischief + " " + response);
+        annoyance = 0;
+    }else{
+        return;
+    }
+}
+
+/* Not needed at the moment
+void tests(IRCMessage message, IRCClient* client)
+{
+    std::string text = message.parameters.at(message.parameters.size() - 1);
+    if ((text == "testing") || (text == "joined")) {
+        //   client->SendIRC(say("testing"));
+        client->SendIRC("PRIVMSG " + chan + " :that's inside: " + chan + "\r\n");
+        client->SendIRC("PRIVMSG " + chan + " :that's inside: " + message.parameters.at(1) + "\r\n");
+        client->SendIRC("PRIVMSG " + chan + " :that's inside: " + message.parameters.at(2) + "\r\n");
+        client->SendIRC("PRIVMSG " + chan + " :that's inside: " + message.parameters.at(3) + "\r\n");
+        client->SendIRC("PRIVMSG " + chan + " :that's inside: " + message.parameters.at(4) + "\r\n");
+        
+    }
+    return;
+}
+*/
+
+/* not needed at the moment
+std::string convert()
+{
+    std:: string tocon = "convert successful";
+    return tocon;
+}
+*/
+
 void cmds(IRCMessage message, IRCClient* client)
 {
     std::string text = message.parameters.at(message.parameters.size() - 1);
-    std::string act;
-    if (text[0] == '!')
+    if ((text[0] == '!') || (text[0] == '.'))
     {
+        
+        currtime = std::time(nullptr);
+        checktime();
         std::string act = text.substr(1, text.find(" ") - 1);
         std::string inp = text.substr(text.find(" ") + 1);
+        std::string chan = message.parameters.at(0);
         std::string usern = message.prefix.nick;
-        if (lastusr == usern)
-            ++cnt;
-        else
-            cnt = 0;
+        annoyed(client, usern);
         lastusr = usern;
-        if (act == "d")
-        {
-            if (cnt == 6)
-            {
-                client->SendIRC("PRIVMSG #mtv :" + usern + ", don't you have your own dice?\r\n");
-            }else{
-                std::string s = text.substr(3);
-                std::stringstream trans(s);
-                int x = 0;
-                trans >> x;
-                if (trans.fail())
-                {
-                    trans.clear();
-                    trans.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
-                    client->SendIRC("PRIVMSG #mtv :" + usern + ", fuck you.\r\n");
-                    return;
-                }
-                if (!trans.fail()) 
-                {
-                    srand(time(0));
-                    int result = (1+(rand()%x));
-                    std::string conv = std::to_string(result);
-                    client->SendIRC("PRIVMSG #mtv :" + usern + " has rolled a " + conv + ".\r\n");
-                    if (result == 420) {
-                        client->SendIRC("PRIVMSG #mtv :FOUR TWENTY blaze it fgt! I might be just take a liking to you\r\n");
-                    }
-                }
-            }
-        }
-        if (act == "ping") {
-                if (cnt == 6)
-                    client->SendIRC("PRIVMSG #mtv :Leave me alone..\r\n");
-                else
-                    client->SendIRC("PRIVMSG #mtv :Pong!\r\n");
-        }
-        if (act == "choose") {
+     // bool isChannel = usern[0] == '#';
+     //  if (!isChannel) return;
+        
+        if (act == "shouldi") {
             std::string answer;
-            std::string option1 = inp.substr(0, inp.find("or") - 1);
-            std::string option2 = inp.substr(inp.find("or") + 3);
-                
             srand(time(0));
             int i = (rand()%2);
             if (i == 0)
-                answer = option1;
+                answer = "Yes.";
             else
-                answer = option2;
-            if (cnt == 6)
-                client->SendIRC("PRIVMSG #mtv :" + answer + " and eat your elbow.");
-            else
-                client->SendIRC("PRIVMSG #mtv :" + answer + ".\r\n");
+                answer = "No.";
+            client ->SendIRC("PRIVMSG " + chan + " :" + answer + "\r\n");
+        }
+        if (act == "setinfo")
+        {
+            SetinfoCommand* command = new SetinfoCommand();
+            command->Execute(client, inp, usern, chan);
+        }
+        if (act == "d")
+        {
+            if (annoyance >= 6)
+            {
+                client->SendIRC("PRIVMSG " + chan + " :" + usern + "?\r\n");
+                annoyance = 0;
+            }else{
+                    if (!inp.empty()) {
+                        DiceCommand* command = new DiceCommand();
+                        command->Execute(client, inp, usern, chan);
+                    }
+                }
+        }
+        if (act == "ping") {
+                if (annoyance == 6)
+                    client->SendIRC("PRIVMSG " + chan + " :Leave me alone..\r\n");
+                else
+                    client->SendIRC("PRIVMSG " + chan + " :Pong!\r\n");
+        }
+        if (act == "choose") {
+            ChooseCommand* command = new ChooseCommand();
+            command->Execute(client, inp, usern, chan);
         }
         if (act == "shouldi") {
             std::string answer;
@@ -207,90 +325,142 @@ void cmds(IRCMessage message, IRCClient* client)
                 answer = "Yes.";
             else
                 answer = "No.";
-            client ->SendIRC("PRIVMSG #mtv :" + answer + "\r\n");
+            client ->SendIRC("PRIVMSG " + chan + " :" + answer + "\r\n");
         }
+        if (act == "shittaste") {
+            std::string code = "\x03";
+            std::string color = "30";
+            std::string color2 = "04";
+            std::string color3 = "09";
+            client->SendIRC("PRIVMSG " + chan + " :" + code + color + "SHIT" + code +  color2 + "TASTE" + code + color3 + "ONLINE");
+        }
+
         if (act == "drinkin") {
-            std::time_t currtime = std::time(nullptr);
             drinkers.insert(std::pair<std::string, std::time_t>(usern, currtime));
             std::string out;
-            std::stringstream trans;
-            for (std::map<std::string, std::time_t>::iterator it=drinkers.begin(); it!=drinkers.end(); ++it)
-            {
-                if (!(it->second < currtime-43200))
+            std::string joins;
+            std::string ends;
+                if (drinkers.size() == 1)
                 {
-                    if (it != std::prev(drinkers.end()))
-                        out += it->first + ", ";
-                    else 
-                        out += it->first + ".";
-                }else{
-                drinkers.erase(it);
+                    out = drinkers.begin()->first;
                 }
-            }
-            client ->SendIRC("PRIVMSG #mtv :Another round for " + out + " Cheers!\r\n");
+                else if (drinkers.size() == 2)
+                {
+                    std::string w2 = std::next(drinkers.begin())->first;
+                    out = drinkers.begin()->first + " and " + w2 + " are";
+                }
+                else{
+                    for (std::map<std::string, std::time_t>::iterator it=drinkers.begin(); it!=drinkers.end(); ++it)
+                    {
+                        ends = " are";
+                        if (!(it == std::prev(drinkers.end(), 2)))
+                            joins = ", ";
+                        else 
+                            joins = " and ";
+                        if (it != std::prev(drinkers.end()))
+                            out += it->first + joins;
+                        else
+                            out += it->first + ends;
+                    }
+
+                }
+            client->SendIRC("PRIVMSG " + chan + " :" + usern + " is hitting the liquor.");
+            std::string addon = (drinkers.size() > 4) ? " Please treat my relatives kindly." : "";
+            client ->SendIRC("PRIVMSG " + chan + " :Another round for " + out + ". Cheers!" + addon);
         }
         if (act == "smokin") {
-            std::time_t currtime = std::time(nullptr);
             smokers.insert(std::pair<std::string, std::time_t>(usern, currtime));
             std::string out;
-            std::stringstream trans;
-            for (std::map<std::string, std::time_t>::iterator it=smokers.begin(); it!=smokers.end(); ++it)
-            {
-                if (!(it->second < currtime-43200))
+            std::string joins;
+            std::string ends;
+                if (smokers.size() == 1)
                 {
-                    if (it != std::prev(smokers.end()))
-                        out += it->first + ", ";
-                    else 
-                        out += it->first + ".";
-                }else{
-                smokers.erase(it);
+                    out = smokers.begin()->first + " is";
                 }
-            }
-            client ->SendIRC("PRIVMSG #mtv :Another toke for " + out + "\r\n");
+                else if (smokers.size() == 2)
+                {
+                    std::string w2 = std::next(smokers.begin())->first;
+                    out = smokers.begin()->first + " and " + w2 + " are";
+                }
+                else{
+                    for (std::map<std::string, std::time_t>::iterator it=smokers.begin(); it!=smokers.end(); ++it)
+                    {
+                        ends = " are";
+                        if (!(it == std::prev(smokers.end(), 2)))
+                            joins = ", ";
+                        else 
+                            joins = " and ";
+                        if (it != std::prev(smokers.end()))
+                            out += it->first + joins;
+                        else
+                            out += it->first + ends;
+                    }
+
+                }
+            client->SendIRC("PRIVMSG " + chan + " :Mmmmmh my favorite.");
+            client->SendIRC("PRIVMSG " + chan + " :" + out + " baked.");
         }
         if (act == "watchin") {
-            std::time_t currtime = std::time(nullptr);
             watchers.insert(std::pair<std::string, std::time_t>(usern, currtime));
             std::string out;
-            for (std::map<std::string, std::time_t>::iterator it=watchers.begin(); it!=watchers.end(); ++it)
-            {
-                if (!(it->second < currtime-43200))
+            std::string joins;
+            std::string ends;
+                if (watchers.size() == 1)
                 {
-                    if (watchers.size() == 1)
-                        out = it->first + "is ";
-                    else if (watchers.size() == 2) {
-                        if (it != std::prev(watchers.end()))
-                            out = it->first + " and ";
-                        else
-                            out += it->first + " are";
-                    }else{
-                    if (it == std::prev(watchers.end(), 2))
-                        out += it->first + " and ";
-                    if (it == std::prev(watchers.end()))
-                        out += it->first + " are";
-                    else
-                        out += it->first + ", ";
-                    }
-                }else{
-                    watchers.erase(it);
+                    out = watchers.begin()->first + " is";
                 }
-            }
-            std::size_t found = inp.find("anime");
-            if (found != std::string::npos) {
-                client ->SendIRC("PRIVMSG #mtv :" + usern + " is staring into the glassy 2d eyes.\n\r");
-            }else{
-                client ->SendIRC("PRIVMSG #mtv :" + usern + " turned on the flickerbox.");
-            }
-            client ->SendIRC("PRIVMSG #mtv :" + out + " watching stuff, probably nothing good.\n\r.");
+                else if (watchers.size() == 2)
+                {
+                    std::string w2 = std::next(watchers.begin())->first;
+                    out = watchers.begin()->first + " and " + w2 + " are";
+                }
+                else{
+                    for (std::map<std::string, std::time_t>::iterator it=watchers.begin(); it!=watchers.end(); ++it)
+                    {
+                        ends = " are";
+                        if (!(it == std::prev(watchers.end(), 2)))
+                            joins = ", ";
+                        else 
+                            joins = " and ";
+                        if (it != std::prev(watchers.end()))
+                            out += it->first + joins;
+                        else
+                            out += it->first + ends;
+                    }
+
+                }
+                std::size_t found = inp.find("anime");
+                if (found != std::string::npos) {
+                    client ->SendIRC("PRIVMSG " + chan + " :" + usern + " is staring into the glassy 2d eyes.\r\n");
+                }else{
+                    client ->SendIRC("PRIVMSG " + chan + " :" + usern + " turned on the flickerbox.");
+                }
+                client ->SendIRC("PRIVMSG " + chan + " :" + out + " watching stuff, probably nothing good.\r\n");
         }
-        return;
+        
+        if (act == "namaste") {
+            client->SendIRC("PRIVMSG " + chan + " :With the goodness inside, to always be thankful for what we have, and those around of us. To look forward with positive energy, for health and well-being. With this intention, EXU-POLOSION!");
+        }
+        //move this to enter a name when starting the program that is admin
+        if ((act == "leave") && (usern == "/* not defined yet */")) {
+            std::string response = "As you wish.";
+            //client->SendIRC(say(response));
+            //client->SendIRC(say("As you wish."));
+            client->SendIRC("PRIVMSG " + chan + " :" + response + "\r\n");
+            client ->SendIRC("PART " +  chan);
+        }
     }
+        //testing space
+    
+    return;
 }
+
 
 
 ThreadReturn inputThread(void* client)
 {
     std::string command;
-
+    
     commandHandler.AddCommand("msg", 2, &msgCommand);
     commandHandler.AddCommand("join", 1, &joinCommand);
     commandHandler.AddCommand("part", 1, &partCommand);
@@ -320,26 +490,24 @@ ThreadReturn inputThread(void* client)
 
 int main(int argc, char* argv[])
 {
-    if (argc < 3)
-    {
-        std::cout << "Insuficient parameters: host port [nick] [user]" << std::endl;
-        return 1;
-    }
-    char* host = argv[1];
-    int port = atoi(argv[2]);
-    std::string nick("MyIRCClient");
-    std::string user("IRCClient");
-
+    char* host = BotConfig::Host;
+    int port = BotConfig::Port;
+    std::string nick(BotConfig::Nickname);
+    std::string user(BotConfig::User);
+    
     if (argc >= 4)
         nick = argv[3];
     if (argc >= 5)
         user = argv[4];
-
+    sixhcycle = std::time(nullptr);
+    daystart = std::time(nullptr);
     IRCClient client;
     client.HookIRCCommand("PRIVMSG", &cmds);
-
+    // initialize userinfos from file
+    writeMap(setinfos, setinfoFile);
+    
     client.Debug(true);
-
+    
     // Start the input thread
     Thread thread;
     thread.Start(&inputThread, &client);
@@ -358,9 +526,16 @@ int main(int argc, char* argv[])
 
                 running = true;
                 signal(SIGINT, signalHandler);
-
-                while (client.Connected() && running)
+                bool joined = false;
+                while (client.Connected() && running) {
+                    if (!joined) {
+                        std::chrono::milliseconds timespan(10000);
+                        std::this_thread::sleep_for(timespan);
+                        joinCommand(BotConfig::Channel, &client);
+                        joined = true;
+                    }
                     client.ReceiveData();
+                }
             }
 
             if (client.Connected())
