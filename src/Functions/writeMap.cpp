@@ -11,7 +11,7 @@ void writeMap(std::map<std::string, std::string> &themap, std::string &fname)
     while (getline(infile, line))
     {
         if (!line.empty()) {
-            std::string key = line.substr(0, line.find(" ") - 1);
+            std::string key = line.substr(0, line.find(" "));
             std::string value = line.substr(line.find(" ") + 1);
             themap.insert(std::pair<std::string, std::string>(key, value));
         }

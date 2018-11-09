@@ -12,10 +12,8 @@ void printMap(std::map<std::string, std::string> &themap, std::string &fname)
         }
         for (auto &kv : themap)
         {
-            stream << kv.first << "hi " << kv.second << '\n';
-            std::cout << "kv.first = " << kv.first << " and kv.second = " << kv.second << std::endl;
+            stream << kv.first << " " << kv.second << '\n';
         }
-        std::cout << "Copied map to file" << std::endl;
         stream.close();
-    }
+        }
 }
