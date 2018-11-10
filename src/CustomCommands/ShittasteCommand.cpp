@@ -2,7 +2,6 @@
 
 
 void ShittasteCommand::Execute(IRCClient* client, std::string input, std::string user, std::string channel) {
-   
     std::string code = "\x03";
     std::string color = "30";
     std::string color2 = "04";

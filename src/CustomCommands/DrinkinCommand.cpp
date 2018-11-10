@@ -14,7 +14,7 @@ void DrinkinCommand::Execute(IRCClient* client, std::string input, std::string u
     else if (drinkers.size() == 2)
     {
         std::string w2 = std::next(drinkers.begin())->first;
-        out = drinkers.begin()->first + " and " + w2 + " are";
+        out = drinkers.begin()->first + " and " + w2;
     }
     else{
         for (std::map<std::string, std::time_t>::iterator it=drinkers.begin(); it!=drinkers.end(); ++it)

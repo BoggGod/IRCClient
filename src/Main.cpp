@@ -269,15 +269,13 @@ void cmds(IRCMessage message, IRCClient* client)
      //  if (!isChannel) return;
         
         if (act == "shouldi") {
-            ShouldiCommand* command = new ShouldiCommand();
-            command->Execute(client, inp, usern, chan);
-            delete command;
+            ShouldiCommand command;
+            command.Execute(client, inp, usern, chan);
         }
         if (act == "setinfo")
         {
-            SetinfoCommand* command = new SetinfoCommand();
-            command->Execute(client, inp, usern, chan);
-            delete command;
+            SetinfoCommand command;
+            command.Execute(client, inp, usern, chan);
         }
         if (act == "d")
         {
@@ -287,9 +285,8 @@ void cmds(IRCMessage message, IRCClient* client)
                 annoyance = 0;
             }else{
                     if (!inp.empty()) {
-                        DiceCommand* command = new DiceCommand();
-                        command->Execute(client, inp, usern, chan);
-                        delete command;
+                        DiceCommand command;
+                        command.Execute(client, inp, usern, chan);
                     }
                 }
         }
@@ -300,30 +297,25 @@ void cmds(IRCMessage message, IRCClient* client)
                     client->SendIRC("PRIVMSG " + chan + " :Pong!\r\n");
         }
         if (act == "choose") {
-            ChooseCommand* command = new ChooseCommand();
-            command->Execute(client, inp, usern, chan);
-            delete command;
+            ChooseCommand command;
+            command.Execute(client, inp, usern, chan);
         }
         if (act == "shittaste") {
-            DrinkinCommand* command = new DrinkinCommand();
-            command->Execute(client, inp, usern, chan);
-            delete command;
+            ShittasteCommand command;
+            command.Execute(client, inp, usern, chan);
         }
 
         if (act == "drinkin") {
-            DrinkinCommand* command = new DrinkinCommand();
-            command->Execute(client, inp, usern, chan);
-            delete command;
+            DrinkinCommand command;
+            command.Execute(client, inp, usern, chan);
         }
         if (act == "smokin") {
-            SmokinCommand* command = new SmokinCommand();
-            command->Execute(client, inp, usern, chan);
-            delete command;
+            SmokinCommand command;
+            command.Execute(client, inp, usern, chan);
         }
         if (act == "watchin") {
-            WatchinCommand* command = new WatchinCommand();
-            command->Execute(client, inp, usern, chan);
-            delete command;
+            WatchinCommand command;
+            command.Execute(client, inp, usern, chan);
         }
         
         if (act == "namaste") {
