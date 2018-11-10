@@ -317,16 +317,6 @@ void cmds(IRCMessage message, IRCClient* client)
             ChooseCommand* command = new ChooseCommand();
             command->Execute(client, inp, usern, chan);
         }
-        if (act == "shouldi") {
-            std::string answer;
-            srand(time(0));
-            int i = (rand()%2);
-            if (i == 0)
-                answer = "Yes.";
-            else
-                answer = "No.";
-            client ->SendIRC("PRIVMSG " + chan + " :" + answer + "\r\n");
-        }
         if (act == "shittaste") {
             std::string code = "\x03";
             std::string color = "30";
