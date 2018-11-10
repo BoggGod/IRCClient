@@ -39,23 +39,12 @@ using namespace Global;
 
 volatile bool running;
 
-std::time_t currtime;
-std::time_t daystart;
-std::time_t sixhcycle;
-std::time_t lastact;
 std::string chan;
-int annoyance = 0;
 std::string lastusr;
 std::map<std::string, int> bank;
 std::map<std::string, int> luck;
 std::map<std::string, std::pair<int, double>> loans;
 
-std::map<std::string, std::time_t> smokers;
-std::map<std::string, std::time_t> chefs;
-std::map<std::string, std::time_t> drinkers;
-std::map<std::string, std::time_t> poppers;
-std::map<std::string, std::time_t> watchers;
-std::map<std::string, std::time_t> listeners;
 
 //flavor texts
 std::vector<std::pair<std::string, std::string>> insults;
@@ -280,19 +269,15 @@ void cmds(IRCMessage message, IRCClient* client)
      //  if (!isChannel) return;
         
         if (act == "shouldi") {
-            std::string answer;
-            srand(time(0));
-            int i = (rand()%2);
-            if (i == 0)
-                answer = "Yes.";
-            else
-                answer = "No.";
-            client ->SendIRC("PRIVMSG " + chan + " :" + answer + "\r\n");
+            ShouldiCommand* command = new ShouldiCommand();
+            command->Execute(client, inp, usern, chan);
+            delete command;
         }
         if (act == "setinfo")
         {
             SetinfoCommand* command = new SetinfoCommand();
             command->Execute(client, inp, usern, chan);
+            delete command;
         }
         if (act == "d")
         {
@@ -304,6 +289,7 @@ void cmds(IRCMessage message, IRCClient* client)
                     if (!inp.empty()) {
                         DiceCommand* command = new DiceCommand();
                         command->Execute(client, inp, usern, chan);
+                        delete command;
                     }
                 }
         }
@@ -316,116 +302,28 @@ void cmds(IRCMessage message, IRCClient* client)
         if (act == "choose") {
             ChooseCommand* command = new ChooseCommand();
             command->Execute(client, inp, usern, chan);
+            delete command;
         }
         if (act == "shittaste") {
-            std::string code = "\x03";
-            std::string color = "30";
-            std::string color2 = "04";
-            std::string color3 = "09";
-            client->SendIRC("PRIVMSG " + chan + " :" + code + color + "SHIT" + code +  color2 + "TASTE" + code + color3 + "ONLINE");
+            DrinkinCommand* command = new DrinkinCommand();
+            command->Execute(client, inp, usern, chan);
+            delete command;
         }
 
         if (act == "drinkin") {
-            drinkers.insert(std::pair<std::string, std::time_t>(usern, currtime));
-            std::string out;
-            std::string joins;
-            std::string ends;
-                if (drinkers.size() == 1)
-                {
-                    out = drinkers.begin()->first;
-                }
-                else if (drinkers.size() == 2)
-                {
-                    std::string w2 = std::next(drinkers.begin())->first;
-                    out = drinkers.begin()->first + " and " + w2 + " are";
-                }
-                else{
-                    for (std::map<std::string, std::time_t>::iterator it=drinkers.begin(); it!=drinkers.end(); ++it)
-                    {
-                        ends = " are";
-                        if (!(it == std::prev(drinkers.end(), 2)))
-                            joins = ", ";
-                        else 
-                            joins = " and ";
-                        if (it != std::prev(drinkers.end()))
-                            out += it->first + joins;
-                        else
-                            out += it->first + ends;
-                    }
-
-                }
-            client->SendIRC("PRIVMSG " + chan + " :" + usern + " is hitting the liquor.");
-            std::string addon = (drinkers.size() > 4) ? " Please treat my relatives kindly." : "";
-            client ->SendIRC("PRIVMSG " + chan + " :Another round for " + out + ". Cheers!" + addon);
+            DrinkinCommand* command = new DrinkinCommand();
+            command->Execute(client, inp, usern, chan);
+            delete command;
         }
         if (act == "smokin") {
-            smokers.insert(std::pair<std::string, std::time_t>(usern, currtime));
-            std::string out;
-            std::string joins;
-            std::string ends;
-                if (smokers.size() == 1)
-                {
-                    out = smokers.begin()->first + " is";
-                }
-                else if (smokers.size() == 2)
-                {
-                    std::string w2 = std::next(smokers.begin())->first;
-                    out = smokers.begin()->first + " and " + w2 + " are";
-                }
-                else{
-                    for (std::map<std::string, std::time_t>::iterator it=smokers.begin(); it!=smokers.end(); ++it)
-                    {
-                        ends = " are";
-                        if (!(it == std::prev(smokers.end(), 2)))
-                            joins = ", ";
-                        else 
-                            joins = " and ";
-                        if (it != std::prev(smokers.end()))
-                            out += it->first + joins;
-                        else
-                            out += it->first + ends;
-                    }
-
-                }
-            client->SendIRC("PRIVMSG " + chan + " :Mmmmmh my favorite.");
-            client->SendIRC("PRIVMSG " + chan + " :" + out + " baked.");
+            SmokinCommand* command = new SmokinCommand();
+            command->Execute(client, inp, usern, chan);
+            delete command;
         }
         if (act == "watchin") {
-            watchers.insert(std::pair<std::string, std::time_t>(usern, currtime));
-            std::string out;
-            std::string joins;
-            std::string ends;
-                if (watchers.size() == 1)
-                {
-                    out = watchers.begin()->first + " is";
-                }
-                else if (watchers.size() == 2)
-                {
-                    std::string w2 = std::next(watchers.begin())->first;
-                    out = watchers.begin()->first + " and " + w2 + " are";
-                }
-                else{
-                    for (std::map<std::string, std::time_t>::iterator it=watchers.begin(); it!=watchers.end(); ++it)
-                    {
-                        ends = " are";
-                        if (!(it == std::prev(watchers.end(), 2)))
-                            joins = ", ";
-                        else 
-                            joins = " and ";
-                        if (it != std::prev(watchers.end()))
-                            out += it->first + joins;
-                        else
-                            out += it->first + ends;
-                    }
-
-                }
-                std::size_t found = inp.find("anime");
-                if (found != std::string::npos) {
-                    client ->SendIRC("PRIVMSG " + chan + " :" + usern + " is staring into the glassy 2d eyes.\r\n");
-                }else{
-                    client ->SendIRC("PRIVMSG " + chan + " :" + usern + " turned on the flickerbox.");
-                }
-                client ->SendIRC("PRIVMSG " + chan + " :" + out + " watching stuff, probably nothing good.\r\n");
+            WatchinCommand* command = new WatchinCommand();
+            command->Execute(client, inp, usern, chan);
+            delete command;
         }
         
         if (act == "namaste") {
