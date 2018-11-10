@@ -8,7 +8,12 @@ void ChooseCommand::Execute(IRCClient* client, std::string input, std::string us
     int orIndex = 1;
     std::string option = "";
     orIndex = input.find(orPattern);
-
+    if (orIndex == -1) {
+        std::string yesOrNo[2] = {"Yes", "No"};
+        srand(time(0));
+        client->SendPrivMsg(channel, yesOrNo[rand() % 2]);
+        return;
+    }
     while (orIndex > 0) {
         option = input.substr(0, orIndex);
         options.push_back(option);
@@ -18,14 +23,13 @@ void ChooseCommand::Execute(IRCClient* client, std::string input, std::string us
         input = input.substr(orIndex + 4);
         orIndex = input.find(orPattern);
     }
-
     if (input != "") {
         options.push_back(input);
     }
 
     srand(time(0));
     int i = (rand() % options.size());
-
+    
     client->SendPrivMsg(channel, options.at(i));
 }
 
