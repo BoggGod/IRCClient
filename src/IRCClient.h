@@ -110,7 +110,6 @@ public:
 
     void Debug(bool debug) { _debug = debug; };
     
-
 private:
     void HandleCommand(IRCMessage /*message*/);
     void CallHook(std::string /*command*/, IRCMessage /*message*/);

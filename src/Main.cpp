@@ -39,8 +39,8 @@ using namespace Global;
 
 volatile bool running;
 
-std::string chan;
 std::string lastusr;
+/*
 std::map<std::string, int> bank;
 std::map<std::string, int> luck;
 std::map<std::string, std::pair<int, double>> loans;
@@ -50,6 +50,7 @@ std::map<std::string, std::pair<int, double>> loans;
 std::vector<std::pair<std::string, std::string>> insults;
 std::vector<std::pair<std::string, std::string>> leaves;
 
+*/
 void signalHandler(int signal)
 {
     running = false;
@@ -178,42 +179,7 @@ void
     return result;
 }
 */
-
-void refMap(/* void */)
-{
-    for (std::map<std::string, std::time_t>::iterator it=watchers.begin(); it!=watchers.end(); ++it)
-    {
-        if (currtime - it->second >= 43200)
-            watchers.erase(it);
-    }
-        for (std::map<std::string, std::time_t>::iterator it=smokers.begin(); it!=smokers.end(); ++it)
-    {
-        if (currtime - it->second >= 43200)
-            smokers.erase(it);
-    }
-        for (std::map<std::string, std::time_t>::iterator it=drinkers.begin(); it!=drinkers.end(); ++it)
-    {
-        if (currtime - it->second >= 43200)
-            smokers.erase(it);
-    }
-    return;
-}
-
-
-void checktime(/* void */)
-{
-    if (currtime - daystart >= 86400)
-        daystart = currtime;
-    if (currtime - daystart >= 43200)
-    {
-        sixhcycle = currtime;
-        refMap();
-    }
-    return;
-}
-
-        
-    
+            
 void annoyed(IRCClient* client, std::string &mischief)
 {
     std::string response = "is an elbow muncher.";
@@ -226,38 +192,12 @@ void annoyed(IRCClient* client, std::string &mischief)
     }
 }
 
-/* Not needed at the moment
-void tests(IRCMessage message, IRCClient* client)
-{
-    std::string text = message.parameters.at(message.parameters.size() - 1);
-    if ((text == "testing") || (text == "joined")) {
-        //   client->SendIRC(say("testing"));
-        client->SendIRC("PRIVMSG " + chan + " :that's inside: " + chan + "\r\n");
-        client->SendIRC("PRIVMSG " + chan + " :that's inside: " + message.parameters.at(1) + "\r\n");
-        client->SendIRC("PRIVMSG " + chan + " :that's inside: " + message.parameters.at(2) + "\r\n");
-        client->SendIRC("PRIVMSG " + chan + " :that's inside: " + message.parameters.at(3) + "\r\n");
-        client->SendIRC("PRIVMSG " + chan + " :that's inside: " + message.parameters.at(4) + "\r\n");
-        
-    }
-    return;
-}
-*/
-
-/* not needed at the moment
-std::string convert()
-{
-    std:: string tocon = "convert successful";
-    return tocon;
-}
-*/
 
 void cmds(IRCMessage message, IRCClient* client)
 {
     std::string text = message.parameters.at(message.parameters.size() - 1);
     if ((text[0] == '!') || (text[0] == '.'))
     {
-        
-        currtime = std::time(nullptr);
         checktime();
         std::string act = text.substr(1, text.find(" ") - 1);
         std::string inp = text.substr(text.find(" ") + 1);
@@ -267,7 +207,6 @@ void cmds(IRCMessage message, IRCClient* client)
         lastusr = usern;
      // bool isChannel = usern[0] == '#';
      //  if (!isChannel) return;
-        
         if (act == "shouldi") {
             ShouldiCommand command;
             command.Execute(client, inp, usern, chan);
@@ -329,9 +268,7 @@ void cmds(IRCMessage message, IRCClient* client)
             client->SendIRC("PRIVMSG " + chan + " :" + response + "\r\n");
             client ->SendIRC("PART " +  chan);
         }
-    }
-        //testing space
-    
+    }    
     return;
 }
 
@@ -374,6 +311,7 @@ int main(int argc, char* argv[])
     int port = BotConfig::Port;
     std::string nick(BotConfig::Nickname);
     std::string user(BotConfig::User);
+    chan = BotConfig::Channel;
     
     if (argc >= 4)
         nick = argv[3];
@@ -409,15 +347,15 @@ int main(int argc, char* argv[])
                 bool joined = false;
                 while (client.Connected() && running) {
                     if (!joined) {
-                        std::chrono::milliseconds timespan(10000);
-                        std::this_thread::sleep_for(timespan);
-                        joinCommand(BotConfig::Channel, &client);
-                        joined = true;
+                    std::chrono::milliseconds timespan(10000);
+                    std::this_thread::sleep_for(timespan);
+                    joinCommand(BotConfig::Channel, &client);
+                    joined = true;
                     }
-                    client.ReceiveData();
+                
+                client.ReceiveData();
                 }
             }
-
             if (client.Connected())
                 client.Disconnect();
 

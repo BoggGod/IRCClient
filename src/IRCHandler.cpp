@@ -147,7 +147,7 @@ void IRCClient::HandleServerMessage(IRCMessage message)
 {
     if( message.parameters.empty() )
         return;
-
+    
     std::vector<std::string>::const_iterator itr = message.parameters.begin();
     ++itr; // skip the first parameter (our nick)
     for (; itr != message.parameters.end(); ++itr)

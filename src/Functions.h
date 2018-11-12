@@ -4,5 +4,7 @@
 #include "Functions/printMap.h"
 #include "Functions/writeMap.h"
 #include "Functions/cleanMap.h"
+#include "Functions/refMap.h"
+#include "Functions/checktime.h"
 
 #endif

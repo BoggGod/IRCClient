@@ -20,6 +20,8 @@ namespace Global
     extern std::time_t daystart;
     extern std::time_t sixhcycle;
     extern int annoyance;
+    extern bool joinedChannel;
+    extern std::string chan;
 }
 
 #endif

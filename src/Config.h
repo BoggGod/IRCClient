@@ -5,7 +5,7 @@
 
 namespace BotConfig
 {
-	char* Channel = "#botshit";    
+	char* Channel = "#botshit";
 	int Port = 6667;
 	char* Host = "irc.irchighway.net";
 	std::string  Nickname = "Bottles";

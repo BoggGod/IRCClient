@@ -14,4 +14,6 @@ namespace Global
     std::time_t daystart;
     std::time_t sixhcycle;
     int annoyance = 0;
+    bool joinedChannel = false;
+    std::string chan = "";
 }
