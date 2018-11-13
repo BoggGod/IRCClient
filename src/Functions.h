@@ -6,5 +6,6 @@
 #include "Functions/cleanMap.h"
 #include "Functions/refMap.h"
 #include "Functions/checktime.h"
+#include "Functions/SmsMessage.h"
 
 #endif

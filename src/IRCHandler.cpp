@@ -117,6 +117,18 @@ void IRCClient::HandleChannelJoinPart(IRCMessage message)
     std::cout << message.prefix.nick << " " << action << " " << channel << std::endl;
     if (setinfos.find(message.prefix.nick) != setinfos.end())
       SendIRC("PRIVMSG " + channel + " :" + message.prefix.nick + "'s setinfo: " + setinfos[message.prefix.nick]);
+    if (SmsList.find(message.prefix.nick) != SmsList.end()) {
+        std::chrono::milliseconds timespan(2000);
+        std::this_thread::sleep_for(timespan);
+        for (auto &w : SmsList[message.prefix.nick]) {
+            SendIRC("PRIVMSG " + w->destination + " :" + w->recipient + "! " + w->sender +
+            " has left me a message for you. It reads:");
+            SendIRC("PRIVMSG " + w->destination + " :" "\"" + w->message + "\"");
+            //SendIRC(w->printFormat());
+            //SendIRC(w->printFormat2());
+        }
+        SmsList.erase(message.prefix.nick);
+    }
 }
 
 void IRCClient::HandleUserNickChange(IRCMessage message)

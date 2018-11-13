@@ -11,5 +11,7 @@
 #include "CustomCommands/ShittasteCommand.h"
 #include "CustomCommands/ShouldiCommand.h"
 #include "CustomCommands/DrinkinCommand.h"
+#include "CustomCommands/HelpCommand.h"
+#include "CustomCommands/SmsCommand.h"
 
 #endif

@@ -203,10 +203,13 @@ void cmds(IRCMessage message, IRCClient* client)
         std::string inp = text.substr(text.find(" ") + 1);
         std::string chan = message.parameters.at(0);
         std::string usern = message.prefix.nick;
+        std::string isChanstr = message.parameters[0];
         annoyed(client, usern);
         lastusr = usern;
-     // bool isChannel = usern[0] == '#';
-     //  if (!isChannel) return;
+        bool isChannel = isChanstr[0] == '#';
+        if (!isChannel)
+            chan = usern;
+        
         if (act == "shouldi") {
             ShouldiCommand command;
             command.Execute(client, inp, usern, chan);
@@ -229,11 +232,19 @@ void cmds(IRCMessage message, IRCClient* client)
                     }
                 }
         }
+        if (act == "help") {
+            HelpCommand command;
+            command.Execute(client, inp, usern, usern);
+        }
         if (act == "ping") {
                 if (annoyance == 6)
                     client->SendIRC("PRIVMSG " + chan + " :Leave me alone..\r\n");
                 else
                     client->SendIRC("PRIVMSG " + chan + " :Pong!\r\n");
+        }
+        if (act == "sms") {
+            SmsCommand command;
+            command.Execute(client, inp, usern, chan);
         }
         if (act == "choose") {
             ChooseCommand command;
