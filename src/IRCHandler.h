@@ -18,8 +18,6 @@
 
 #include "IRCClient.h"
 #include "Vars.h"
-#include <chrono>
-#include <thread>
 
 #define NUM_IRC_CMDS 26
 

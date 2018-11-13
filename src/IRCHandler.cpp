@@ -115,11 +115,9 @@ void IRCClient::HandleChannelJoinPart(IRCMessage message)
     std::string channel = message.parameters.at(0);
     std::string action = message.command == "JOIN" ? "joins" : "leaves";
     std::cout << message.prefix.nick << " " << action << " " << channel << std::endl;
-    if (setinfos.find(message.prefix.nick) != setinfos.end())
+    if ((setinfos.find(message.prefix.nick) != setinfos.end()) && (action != "leaves"))
       SendIRC("PRIVMSG " + channel + " :" + message.prefix.nick + "'s setinfo: " + setinfos[message.prefix.nick]);
-    if (SmsList.find(message.prefix.nick) != SmsList.end()) {
-        std::chrono::milliseconds timespan(2000);
-        std::this_thread::sleep_for(timespan);
+    if ((SmsList.find(message.prefix.nick) != SmsList.end()) && (action != "leaves")) {
         for (auto &w : SmsList[message.prefix.nick]) {
             SendIRC("PRIVMSG " + w->destination + " :" + w->recipient + "! " + w->sender +
             " has left me a message for you. It reads:");
