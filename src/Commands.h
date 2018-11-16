@@ -13,5 +13,11 @@
 #include "CustomCommands/DrinkinCommand.h"
 #include "CustomCommands/HelpCommand.h"
 #include "CustomCommands/SmsCommand.h"
+#include "CustomCommands/BikinCommand.h"
+#include "CustomCommands/PoopinCommand.h"
+#include "CustomCommands/GaminCommand.h"
+#include "CustomCommands/SleepinCommand.h"
+#include "CustomCommands/ReadinCommand.h"
+#include "CustomCommands/ListeninCommand.h"
 
 #endif

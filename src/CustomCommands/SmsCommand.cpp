@@ -13,6 +13,12 @@ void SmsCommand::Execute(IRCClient* client, std::string input, std::string user,
         + ".sms <recipient> <message> (optionally '-p' anywhere in the message to make it private)");
         return;
     }
+    std::time_t now = time(0);
+    char* dt = ctime(&now);
+    std::tm *gmtm = gmtime (&now);
+    dt = asctime(gmtm);
+    std::string timestamp = dt;
+    
     std::string message = input.substr(input.find(" ") + 1);
     std::string sender = user;
     std::string destination = channel;
@@ -33,8 +39,20 @@ void SmsCommand::Execute(IRCClient* client, std::string input, std::string user,
     }
     
     client->SendIRC("PRIVMSG " + channel + " :" + output);
-    std::shared_ptr<SmsMessage> letter = std::make_shared<SmsMessage> (sender, destination, message, recipient);
+    std::shared_ptr<SmsMessage> letter = std::make_shared<SmsMessage> (sender, destination, message, recipient, timestamp);
     SmsList[recipient] = {letter};
+    for (auto &kv : SmsList)
+    {
+            std::cout << kv.second.front()->recipient << '\n'; 
+            for (auto &v : kv.second) {
+                std::cout << "#|" << v->sender << "#|" << v->destination
+                << "#|" << v->message << "#|" << v->recipient << "#|" << v->timestamp
+                << '\n';
+            } 
+                
+    }
+    
+    smsMapToFile(SmsList, smsFile);
 }
 
 SmsCommand::SmsCommand()

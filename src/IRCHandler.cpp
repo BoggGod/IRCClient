@@ -118,14 +118,18 @@ void IRCClient::HandleChannelJoinPart(IRCMessage message)
     if ((setinfos.find(message.prefix.nick) != setinfos.end()) && (action != "leaves"))
       SendIRC("PRIVMSG " + channel + " :" + message.prefix.nick + "'s setinfo: " + setinfos[message.prefix.nick]);
     if ((SmsList.find(message.prefix.nick) != SmsList.end()) && (action != "leaves")) {
+        std::string smsNum = std::to_string(SmsList[message.prefix.nick].size());
+        SendIRC("PRIVMSG " + channel + " :" + message.prefix.nick + ", you have " +
+        smsNum + " new messages. I'll probably whisper" + 
+        " private messages to you.");
         for (auto &w : SmsList[message.prefix.nick]) {
-            SendIRC("PRIVMSG " + w->destination + " :" + w->recipient + "! " + w->sender +
-            " has left me a message for you. It reads:");
-            SendIRC("PRIVMSG " + w->destination + " :" "\"" + w->message + "\"");
+            SendIRC("PRIVMSG " + w->destination + " :" + " From " + 
+            w->sender + "\"" + w->message + "\" " + w->timestamp);
             //SendIRC(w->printFormat());
             //SendIRC(w->printFormat2());
         }
         SmsList.erase(message.prefix.nick);
+        smsMapToFile(SmsList, smsFile);
     }
 }
 

@@ -7,5 +7,8 @@
 #include "Functions/refMap.h"
 #include "Functions/checktime.h"
 #include "Functions/SmsMessage.h"
+#include "Functions/fileToSmsMap.h"
+#include "Functions/smsMapToFile.h"
+#include "Functions/cleanSmsMap.h"
 
 #endif

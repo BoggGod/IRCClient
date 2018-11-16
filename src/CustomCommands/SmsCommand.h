@@ -2,8 +2,10 @@
 #define _SmsCommand_H
 
 #include "Vars.h"
+#include "Functions/smsMapToFile.h"
 #include "Command.h"
 #include <memory>
+#include <ctime>
 
 class SmsCommand : Command
 {

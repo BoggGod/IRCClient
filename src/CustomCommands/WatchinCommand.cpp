@@ -3,6 +3,12 @@
 using namespace Global;
 
 void WatchinCommand::Execute(IRCClient* client, std::string input, std::string user, std::string channel) {
+    if (input.find("-clear") != input.npos) {
+        watchers.erase(user);
+        client->SendIRC("PRIVMSG " + channel + " :" + user +
+        ", you have been removed from .watchin");
+        return;
+    }
 
     watchers.insert(std::pair<std::string, std::time_t>(user, currtime));
     std::string out;

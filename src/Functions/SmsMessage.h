@@ -7,15 +7,16 @@ class SmsMessage
 {
 public:
     SmsMessage();
-    SmsMessage(std::string &send, std::string &dest, std::string &msg, std::string &recip);
-    std::string printFormat() const;
-    std::string printFormat2() const;
+    SmsMessage(std::string &send, std::string &dest, std::string &msg, std::string &recip, std::string &tm);
+    std::string printMessageContent() const;
+    std::string printMessageHeader() const;
     ~SmsMessage();
     
     std::string sender;
     std::string destination;
     std::string message;
     std::string recipient;
+    std::string timestamp;
 
 };
 

@@ -4,10 +4,15 @@ namespace Global
     std::map<std::string, std::vector<std::shared_ptr<SmsMessage>>> SmsList;
 	std::map<std::string, std::string> setinfos;
     std::string setinfoFile = "UserInfoMap";
+    std::string smsFile = "smsFile";
+    std::map<std::string, std::time_t> gamers;
+    std::map<std::string, std::time_t> readers;
+    std::map<std::string, std::time_t> bikers;
+    std::map<std::string, std::time_t> sleepers;
     std::map<std::string, std::time_t> smokers;
     std::map<std::string, std::time_t> chefs;
     std::map<std::string, std::time_t> drinkers;
-    std::map<std::string, std::time_t> poppers;
+    std::map<std::string, std::time_t> poopers;
     std::map<std::string, std::time_t> watchers;
     std::map<std::string, std::time_t> listeners;
     std::time_t lastact;

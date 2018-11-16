@@ -254,7 +254,30 @@ void cmds(IRCMessage message, IRCClient* client)
             ShittasteCommand command;
             command.Execute(client, inp, usern, chan);
         }
-
+        if (act == "readin") {
+            ReadinCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
+        if (act == "listenin") {
+            ListeninCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
+        if (act == "poopin") {
+            PoopinCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
+        if (act == "gamin") {
+            GaminCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
+        if (act == "bikin") {
+            BikinCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
+        if (act == "sleepin") {
+            ReadinCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
         if (act == "drinkin") {
             DrinkinCommand command;
             command.Execute(client, inp, usern, chan);
@@ -334,6 +357,7 @@ int main(int argc, char* argv[])
     client.HookIRCCommand("PRIVMSG", &cmds);
     // initialize userinfos from file
     writeMap(setinfos, setinfoFile);
+    fileToSmsMap(SmsList, smsFile);
     
     client.Debug(true);
     

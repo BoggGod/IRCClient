@@ -18,6 +18,7 @@
 
 #include "IRCClient.h"
 #include "Vars.h"
+#include "Functions/smsMapToFile.h"
 
 #define NUM_IRC_CMDS 26
 
