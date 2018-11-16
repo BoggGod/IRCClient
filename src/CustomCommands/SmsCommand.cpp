@@ -18,6 +18,7 @@ void SmsCommand::Execute(IRCClient* client, std::string input, std::string user,
     std::tm *gmtm = gmtime (&now);
     dt = asctime(gmtm);
     std::string timestamp = dt;
+    timestamp.erase(std::remove(timestamp.begin(), timestamp.end(), '\n'), timestamp.end());
     
     std::string message = input.substr(input.find(" ") + 1);
     std::string sender = user;
@@ -40,7 +41,8 @@ void SmsCommand::Execute(IRCClient* client, std::string input, std::string user,
     
     client->SendIRC("PRIVMSG " + channel + " :" + output);
     std::shared_ptr<SmsMessage> letter = std::make_shared<SmsMessage> (sender, destination, message, recipient, timestamp);
-    SmsList[recipient] = {letter};
+    
+    SmsList[recipient].push_back(letter);
     for (auto &kv : SmsList)
     {
             std::cout << kv.second.front()->recipient << '\n'; 

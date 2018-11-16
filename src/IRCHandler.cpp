@@ -124,7 +124,7 @@ void IRCClient::HandleChannelJoinPart(IRCMessage message)
         " private messages to you.");
         for (auto &w : SmsList[message.prefix.nick]) {
             SendIRC("PRIVMSG " + w->destination + " :" + " From " + 
-            w->sender + "\"" + w->message + "\" " + w->timestamp);
+            w->sender + " \"" + w->message + "\" " + "Received: " + w->timestamp);
             //SendIRC(w->printFormat());
             //SendIRC(w->printFormat2());
         }

@@ -30,6 +30,7 @@ void fileToSmsMap(std::map<std::string, std::vector<std::shared_ptr<SmsMessage>>
                     continue;
                 } else {
                     output = line.substr(sepIndex + 2, sepIndex2 - 2);
+                    output.erase(std::remove(output.begin(), output.end(), '\n'), output.end());
                 }
                 std::cout << output << std::endl;
                 smsVec.push_back(output);

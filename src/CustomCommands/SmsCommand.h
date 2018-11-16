@@ -6,6 +6,7 @@
 #include "Command.h"
 #include <memory>
 #include <ctime>
+#include <algorithm>
 
 class SmsCommand : Command
 {
