@@ -41,7 +41,7 @@ void PoopinCommand::Execute(IRCClient* client, std::string input, std::string us
     }
     client ->SendIRC("PRIVMSG " + channel + " :" + user + " is taking a dump!");
     if (poopers.size() == 1) {
-        client->SendIRC("PRIVMSG " + channel + " :" + user + ", let it all out.");
+        client->SendIRC("PRIVMSG " + channel + " :【ＬＥＴ ＩＴ ＡＬＬ ＯＵＴ】");
     }else{
     client ->SendIRC("PRIVMSG " + channel + " :" + out + " taking a collective dump.");
     }
