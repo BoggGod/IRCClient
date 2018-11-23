@@ -5,8 +5,8 @@ void writeMap(std::map<std::string, std::string> &themap, std::string &fname)
     cleanMap(themap);
     std::ifstream infile(fname);
     if (!infile) {
-        std::cout << "Couldn't open UserInfoMap (there might not be 'setinfos' yet." << std::endl;
-        std::cout << "Creating new UserInfoMap" << std::endl;
+        std::cout << "Couldn't open file to read from" << std::endl;
+        std::cout << "Creating new file" << std::endl;
     }
     std::string line;
     while (getline(infile, line))

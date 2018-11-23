@@ -19,5 +19,6 @@
 #include "CustomCommands/SleepinCommand.h"
 #include "CustomCommands/ReadinCommand.h"
 #include "CustomCommands/ListeninCommand.h"
+#include "CustomCommands/DescCommand.h"
 
 #endif

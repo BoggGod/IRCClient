@@ -200,7 +200,14 @@ void cmds(IRCMessage message, IRCClient* client)
     {
         checktime();
         std::string act = text.substr(1, text.find(" ") - 1);
-        std::string inp = text.substr(text.find(" ") + 1);
+        std::string inp = "";
+        std::string customInp = "";
+        try {
+            inp = text.substr(text.find(" ") + 1);
+        }
+        catch (const std::out_of_range& oor) {
+            inp = "";
+        }
         std::string chan = message.parameters.at(0);
         std::string usern = message.prefix.nick;
         std::string isChanstr = message.parameters[0];
@@ -217,6 +224,11 @@ void cmds(IRCMessage message, IRCClient* client)
         if (act == "setinfo")
         {
             SetinfoCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
+        if (act == "desc")
+        {
+            DescCommand command;
             command.Execute(client, inp, usern, chan);
         }
         if (act == "d")
@@ -357,6 +369,7 @@ int main(int argc, char* argv[])
     client.HookIRCCommand("PRIVMSG", &cmds);
     // initialize userinfos from file
     writeMap(setinfos, setinfoFile);
+    writeMap(describes, descFile);
     fileToSmsMap(SmsList, smsFile);
     
     client.Debug(true);

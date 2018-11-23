@@ -6,7 +6,10 @@ void ShittasteCommand::Execute(IRCClient* client, std::string input, std::string
     std::string color = "30";
     std::string color2 = "04";
     std::string color3 = "09";
-    client->SendIRC("PRIVMSG " + channel + " :" + code + color + "SHIT" + code +  color2 + "TASTE" + code + color3 + "ONLINE");
+    std::string color4 = "00";
+    std::string output1 = code + color + "SHIT" + code + color2 + "TASTE" + code + color3 + "ONLINE" + code + color4;
+    client->SendIRC("PRIVMSG " + channel + " :" + output1 +
+    " ---> https://boards.420chan.org/irc/src/1525140531275.gif");
 }
 
 ShittasteCommand::ShittasteCommand()
