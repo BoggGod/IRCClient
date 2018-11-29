@@ -42,6 +42,7 @@ void DescCommand::Execute(IRCClient* client, std::string input, std::string user
                 describes.erase(target);
                 client->SendIRC("PRIVMSG " + channel + " :" + "Describe removed for " + target + ".");
             }else{
+                ltrim(usrInp);
                 describes[target] = usrInp;
                 client->SendIRC("PRIVMSG " + channel + " :" + "Added/updated " + target + "'s describe.");
             }

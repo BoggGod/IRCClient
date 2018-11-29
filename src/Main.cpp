@@ -199,14 +199,24 @@ void cmds(IRCMessage message, IRCClient* client)
     if ((text[0] == '!') || (text[0] == '.'))
     {
         checktime();
-        std::string act = text.substr(1, text.find(" ") - 1);
+        std::string act = "";
         std::string inp = "";
-        std::string customInp = "";
-        try {
-            inp = text.substr(text.find(" ") + 1);
-        }
-        catch (const std::out_of_range& oor) {
-            inp = "";
+        if (text.find(" ") == text.npos)
+        {
+            try {
+                act = text.substr(1);
+            }
+                catch (const std::out_of_range& oor) {
+                    act = "";
+                }
+        } else {
+            act = text.substr(1, text.find(" ") - 1);
+            try {
+                inp = text.substr(text.find(" ") + 1);
+            }
+            catch (const std::out_of_range& oor) {
+                inp = "";
+            }
         }
         std::string chan = message.parameters.at(0);
         std::string usern = message.prefix.nick;
@@ -287,7 +297,7 @@ void cmds(IRCMessage message, IRCClient* client)
             command.Execute(client, inp, usern, chan);
         }
         if (act == "sleepin") {
-            ReadinCommand command;
+            SleepinCommand command;
             command.Execute(client, inp, usern, chan);
         }
         if (act == "drinkin") {

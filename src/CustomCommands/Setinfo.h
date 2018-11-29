@@ -5,6 +5,7 @@
 #include "Command.h"
 #include <fstream>
 #include <map>
+#include "Functions/general.h"
 
 class SetinfoCommand : Command
 {

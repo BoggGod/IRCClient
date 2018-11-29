@@ -10,5 +10,6 @@
 #include "Functions/fileToSmsMap.h"
 #include "Functions/smsMapToFile.h"
 #include "Functions/cleanSmsMap.h"
+#include "Functions/general.h"
 
 #endif
