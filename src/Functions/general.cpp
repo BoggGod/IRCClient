@@ -7,3 +7,11 @@ void ltrim(std::string &s) {
     }));
 }
 
+void eraseSubstr(std::string &str, const std::string &toErase)
+{
+    size_t pos = std::string::npos;
+    while ((pos = str.find(toErase)) != std::string::npos)
+    {
+        str.erase(pos, toErase.length());
+    }
+}

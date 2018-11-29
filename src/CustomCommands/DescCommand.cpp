@@ -6,6 +6,7 @@ typedef std::map<std::string, std::string> stringMap;
 
 void DescCommand::Execute(IRCClient* client, std::string input, std::string user, std::string channel) 
 {
+    bool validUser = true;
     std::string target = input.substr(0, input.find(" "));
     std::string usrInp;
     try {
@@ -14,15 +15,13 @@ void DescCommand::Execute(IRCClient* client, std::string input, std::string user
     catch (const std::out_of_range& oor) {
         std::string usrInp = "";
     }
-    bool validTarget = false;
-    bool validUser = false;
-    std::cout << target << usrInp << std::endl;
     
+    /*
     if (std::find(descTargets.begin(), descTargets.end(), target) != descTargets.end())
     {
         validTarget = true;
 
-    }else{
+    }else{ 
         client->SendIRC("PRIVMSG " + channel + " :" + "Fool, you've gotta give me one of Sir Dr. Worm's nicks");
         client->SendIRC("PRIVMSG " + channel + " :" + target);
         return;
@@ -33,26 +32,31 @@ void DescCommand::Execute(IRCClient* client, std::string input, std::string user
     }
     
     if (validTarget)
+    {*/
+    if (usrInp != "")
     {
-        if (usrInp != "")
-        {
-            if (!validUser) {
-                client->SendIRC("PRIVMSG " + channel + " :" + "Sorry, you're not authorized to change describes.");
-            }else if ((validUser) && (usrInp.find("-clear") != usrInp.npos)) {
-                describes.erase(target);
-                client->SendIRC("PRIVMSG " + channel + " :" + "Describe removed for " + target + ".");
-            }else{
-                ltrim(usrInp);
-                describes[target] = usrInp;
-                client->SendIRC("PRIVMSG " + channel + " :" + "Added/updated " + target + "'s describe.");
-            }
+        if (!validUser) {
+            client->SendIRC("PRIVMSG " + channel + " :" + "Sorry, you're not authorized to change describes.");
+        }else if ((validUser) && (usrInp.find("-clear") != usrInp.npos)) {
+            describes.erase(target);
+            client->SendIRC("PRIVMSG " + channel + " :" + "Describe removed for " + target + ".");
+        }else if ((validUser) && (usrInp.find("-append") != usrInp.npos)) {
+            ltrim(usrInp);
+            eraseSubstr(usrInp, "-append");
+            describes[target] += usrInp;
+            client->SendIRC("PRIVMSG " + channel + " :" + "Appended to " + target + ".");
         }else{
-            std::map<std::string, std::string>::iterator it = describes.find(target);
-            if (it != describes.end()) {
-                client->SendIRC("PRIVMSG " + channel + " :" + it->first + ": " + it->second);
-            }else{
-                client->SendIRC("PRIVMSG " + channel + " :No describes for that human");
-            }
+            ltrim(usrInp);
+            describes[target] = usrInp;
+            client->SendIRC("PRIVMSG " + channel + " :" + "Added/updated " + target + "'s describe.");
+        }
+    }else{
+        std::map<std::string, std::string>::iterator it = describes.find(target);
+        if (it != describes.end()) {
+            client->SendIRC("PRIVMSG " + channel + " :" + "[" + it->first + 
+            "]" + ": " + it->second);
+        }else{
+            client->SendIRC("PRIVMSG " + channel + " :No describes for [" + target + "].");
         }
     }
     
