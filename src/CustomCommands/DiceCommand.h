@@ -7,6 +7,8 @@
 #include <cmath>
 #include <sstream>
 #include <limits>
+#include <regex>
+#include <exception>
 
 class DiceCommand : Command
 {

@@ -7,6 +7,8 @@
 #include <string>
 
 void ltrim(std::string &s);
+void rtrim(std::string &s);
 void eraseSubstr(std::string &str, const std::string &toErase);
+bool isNumber(const std::string& s);
 
 #endif

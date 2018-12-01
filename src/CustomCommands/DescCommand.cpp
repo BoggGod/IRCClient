@@ -15,24 +15,10 @@ void DescCommand::Execute(IRCClient* client, std::string input, std::string user
     catch (const std::out_of_range& oor) {
         std::string usrInp = "";
     }
-    
-    /*
-    if (std::find(descTargets.begin(), descTargets.end(), target) != descTargets.end())
-    {
-        validTarget = true;
-
-    }else{ 
-        client->SendIRC("PRIVMSG " + channel + " :" + "Fool, you've gotta give me one of Sir Dr. Worm's nicks");
-        client->SendIRC("PRIVMSG " + channel + " :" + target);
+    if (usrInp == "-list") {
+        client->SendIRC("PRIVMSG " + channel + " :" + "Oh no, you don't!");
         return;
     }
-    if (std::find(descTargets.begin(), descTargets.end(), user) != descTargets.end())
-    {
-        validUser = true;
-    }
-    
-    if (validTarget)
-    {*/
     if (usrInp != "")
     {
         if (!validUser) {
@@ -51,15 +37,30 @@ void DescCommand::Execute(IRCClient* client, std::string input, std::string user
             client->SendIRC("PRIVMSG " + channel + " :" + "Added/updated " + target + "'s describe.");
         }
     }else{
+        
         std::map<std::string, std::string>::iterator it = describes.find(target);
-        if (it != describes.end()) {
+        if (target == "-list") {
+            std::string outList = "";
+            for (auto &w : describes) {
+                if (outList.size() < (outList.max_size() - 200)) {
+                outList += w.second + " ";
+                }else{
+                    client->SendIRC("PRIVMSG " + channel +
+                    " :Oops, there are two many Describes for me to fit into"
+                    + "a single string. Try annoying cesar a bit to give me an update.");
+                    return;
+                }
+            }
+            rtrim(outList);
+            client->SendIRC("PRIVMSG " + channel + " :" + "Existing Describes: "
+            + outList);
+        }else if (it != describes.end()) {
             client->SendIRC("PRIVMSG " + channel + " :" + "[" + it->first + 
             "]" + ": " + it->second);
         }else{
             client->SendIRC("PRIVMSG " + channel + " :No describes for [" + target + "].");
         }
     }
-    
     printMap(describes, descFile);
 }
 

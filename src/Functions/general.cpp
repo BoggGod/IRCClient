@@ -4,8 +4,22 @@
 void ltrim(std::string &s) {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
         return !std::isspace(ch);
+}));
+}
+
+// trim from end (in place)
+void rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+        return !std::isspace(ch);
+    }).base(), s.end());
+}
+/*
+void rtrim(std::string &s) {
+    s.erase(s.rbegin(), std::find_if(s.rbegin(), s.rend(), [](int ch) {
+        return !std::isspace(ch);
     }));
 }
+*/
 
 void eraseSubstr(std::string &str, const std::string &toErase)
 {
@@ -14,4 +28,11 @@ void eraseSubstr(std::string &str, const std::string &toErase)
     {
         str.erase(pos, toErase.length());
     }
+}
+
+
+bool isNumber(const std::string& s)
+{
+    return !s.empty() && std::find_if(s.begin(), 
+        s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
 }

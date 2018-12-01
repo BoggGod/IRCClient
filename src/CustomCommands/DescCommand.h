@@ -7,6 +7,8 @@
 #include <map>
 #include <iostream>
 #include <stdexcept>
+#include <cctype>
+#include <regex>
 
 class DescCommand : Command
 {
