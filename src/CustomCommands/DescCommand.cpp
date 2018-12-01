@@ -43,7 +43,7 @@ void DescCommand::Execute(IRCClient* client, std::string input, std::string user
             std::string outList = "";
             for (auto &w : describes) {
                 if (outList.size() < (outList.max_size() - 200)) {
-                outList += w.second + " ";
+                outList += w.first + " ";
                 }else{
                     client->SendIRC("PRIVMSG " + channel +
                     " :Oops, there are two many Describes for me to fit into"
