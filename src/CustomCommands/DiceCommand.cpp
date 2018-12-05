@@ -47,7 +47,7 @@ void DiceCommand::Execute(IRCClient* client, std::string input, std::string user
         }
         rresult = std::to_string(result);
         client->SendIRC("PRIVMSG " + channel + " :" +
-        user + " has thrown " + std::to_string(dies) + " dies" +
+        user + " has thrown " + std::to_string(dies) + " die" +
         " with " + std::to_string(faces) + " faces each, rolling a " +
         rresult + "!");
     }else if ((trans.fail()) || (x <= 0))
@@ -63,7 +63,7 @@ void DiceCommand::Execute(IRCClient* client, std::string input, std::string user
     }
     if (dubs == 1)
         client->SendPrivMsg(channel, "DUBS!");
-    if (dubs == 2)
+    if (dubs == 2) 
         client->SendPrivMsg(channel, "ＱＵＡＤＳ！");
     if (dubs == 3)
     if (dubs == 4)

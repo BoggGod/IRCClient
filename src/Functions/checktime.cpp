@@ -8,7 +8,7 @@ void checktime(/* void */)
     currtime = std::time(nullptr);
     if (currtime - daystart >= 86400)
         daystart = currtime;
-    if (currtime - sixhcycle >= 43200)
+    if (currtime - sixhcycle >= 43200) //43200
     {
         sixhcycle = currtime;
         refMap();

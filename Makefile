@@ -12,7 +12,7 @@ OBJECTS=$(SOURCE_FILES:.cpp=.o)
 OBJECTS2=$(SUB_FILES:.cpp=.o)
 OBJECTS3=$(SUB_FILES2:.cpp=.o)
 # Flags
-CXXFLAGS += -std=c++11
+CXXFLAGS += -std=c++11 -g
 CFLAGS=-c -Wall -I$(SOURCE_DIR)
 LDFLAGS=-lpthread
 # Executable

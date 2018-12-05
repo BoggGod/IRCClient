@@ -22,10 +22,10 @@ void DescCommand::Execute(IRCClient* client, std::string input, std::string user
     if (usrInp != "")
     {
         if (!validUser) {
-            client->SendIRC("PRIVMSG " + channel + " :" + "Sorry, you're not authorized to change describes.");
+            client->SendIRC("PRIVMSG " + channel + " :" + "Sorry, you're not authorized to change descriptions.");
         }else if ((validUser) && (usrInp.find("-clear") != usrInp.npos)) {
             describes.erase(target);
-            client->SendIRC("PRIVMSG " + channel + " :" + "Describe removed for " + target + ".");
+            client->SendIRC("PRIVMSG " + channel + " :" + "Description removed for " + target + ".");
         }else if ((validUser) && (usrInp.find("-append") != usrInp.npos)) {
             ltrim(usrInp);
             eraseSubstr(usrInp, "-append");
@@ -34,7 +34,7 @@ void DescCommand::Execute(IRCClient* client, std::string input, std::string user
         }else{
             ltrim(usrInp);
             describes[target] = usrInp;
-            client->SendIRC("PRIVMSG " + channel + " :" + "Added/updated " + target + "'s describe.");
+            client->SendIRC("PRIVMSG " + channel + " :" + "Added/updated " + target + "'s description.");
         }
     }else{
         
@@ -46,19 +46,19 @@ void DescCommand::Execute(IRCClient* client, std::string input, std::string user
                 outList += w.first + " ";
                 }else{
                     client->SendIRC("PRIVMSG " + channel +
-                    " :Oops, there are two many Describes for me to fit into"
+                    " :Oops, there are two many descriptions for me to fit into"
                     + "a single string. Try annoying cesar a bit to give me an update.");
                     return;
                 }
             }
             rtrim(outList);
-            client->SendIRC("PRIVMSG " + channel + " :" + "Existing Describes: "
+            client->SendIRC("PRIVMSG " + channel + " :" + "Existing descriptions: "
             + outList);
         }else if (it != describes.end()) {
             client->SendIRC("PRIVMSG " + channel + " :" + "[" + it->first + 
             "]" + ": " + it->second);
         }else{
-            client->SendIRC("PRIVMSG " + channel + " :No describes for [" + target + "].");
+            client->SendIRC("PRIVMSG " + channel + " :No descriptions for [" + target + "].");
         }
     }
     printMap(describes, descFile);

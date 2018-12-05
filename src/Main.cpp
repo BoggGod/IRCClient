@@ -34,6 +34,8 @@
 #include <iterator>
 #include <vector>
 #include "Functions.h"
+#include <sys/resource.h>
+#include <sys/time.h>
 
 using namespace Global;
 
@@ -363,6 +365,9 @@ ThreadReturn inputThread(void* client)
 
 int main(int argc, char* argv[])
 {
+    rlimit core_limits;
+    core_limits.rlim_cur = core_limits.rlim_max = RLIM_INFINITY;
+    setrlimit(RLIMIT_CORE, &core_limits);
     char* host = BotConfig::Host;
     int port = BotConfig::Port;
     std::string nick(BotConfig::Nickname);
