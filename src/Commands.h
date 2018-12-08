@@ -20,5 +20,6 @@
 #include "CustomCommands/ReadinCommand.h"
 #include "CustomCommands/ListeninCommand.h"
 #include "CustomCommands/DescCommand.h"
+#include "CustomCommands/YouTubeCommand.h"
 
 #endif
