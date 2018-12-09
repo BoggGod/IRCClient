@@ -45,7 +45,7 @@ IRCCommandHandler ircCommandTable[NUM_IRC_CMDS] =
     { "376",                &IRCClient::HandleServerMessage             },
     { "439",                &IRCClient::HandleServerMessage             },
 };
-
+    
 void IRCClient::HandleCTCP(IRCMessage message)
 {
     std::string to = message.parameters.at(0);
@@ -115,20 +115,20 @@ void IRCClient::HandleChannelJoinPart(IRCMessage message)
     std::string channel = message.parameters.at(0);
     std::string action = message.command == "JOIN" ? "joins" : "leaves";
     std::cout << message.prefix.nick << " " << action << " " << channel << std::endl;
-    if ((setinfos.find(message.prefix.nick) != setinfos.end()) && (action != "leaves"))
-      SendIRC("PRIVMSG " + channel + " :" + message.prefix.nick + "'s setinfo: " + setinfos[message.prefix.nick]);
-    if ((SmsList.find(message.prefix.nick) != SmsList.end()) && (action != "leaves")) {
-        std::string smsNum = std::to_string(SmsList[message.prefix.nick].size());
-        std::string connector = SmsList[message.prefix.nick].size() > 1 ? "s" : "";
+    if ((this->setMap.find(message.prefix.nick) != this->setMap.end()) && (action != "leaves"))
+      SendIRC("PRIVMSG " + channel + " :" + message.prefix.nick + "'s setinfo: " + this->setMap[message.prefix.nick]);
+    if ((this->smsMap.find(message.prefix.nick) != this->smsMap.end()) && (action != "leaves")) {
+        std::string smsNum = std::to_string(this->smsMap[message.prefix.nick].size());
+        std::string connector = this->smsMap[message.prefix.nick].size() > 1 ? "s" : "";
         SendIRC("PRIVMSG " + channel + " :" + message.prefix.nick + ", you have " +
         smsNum + " new message" + connector + ". I'll probably whisper" + 
         " private messages to you.");
-        for (auto &w : SmsList[message.prefix.nick]) {
+        for (auto &w : this->smsMap[message.prefix.nick]) {
             SendIRC("PRIVMSG " + w->destination + " :" + " From " + 
             w->sender + " \"" + w->message + "\" " + "Received: " + w->timestamp);
         }
-        SmsList.erase(message.prefix.nick);
-        smsMapToFile(SmsList, smsFile);
+        this->smsMap.erase(message.prefix.nick);
+        smsMapToFile(this->smsMap, smsFile);
     }
 }
 

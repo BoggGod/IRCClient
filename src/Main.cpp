@@ -181,7 +181,8 @@ void
     return result;
 }
 */
-            
+
+/*
 void annoyed(IRCClient* client, std::string &mischief)
 {
     std::string response = "is an elbow muncher.";
@@ -193,7 +194,7 @@ void annoyed(IRCClient* client, std::string &mischief)
         return;
     }
 }
-
+*/
 std::string ParseYouTubeVideoId(std::string text) {
     std::string result = "";
     std::regex ytVideoId("(http(s|):|)\/\/(www\.|)yout(.*?)\/(embed\/|watch.*?v=|)([a-z_A-Z0-9\-]{11})");
@@ -223,6 +224,7 @@ void cmds(IRCMessage message, IRCClient* client)
 
     if ((text[0] == '!') || (text[0] == '.'))
     {
+        //initilization of message processing
         checktime();
         std::string act = "";
         std::string inp = "";
@@ -243,14 +245,16 @@ void cmds(IRCMessage message, IRCClient* client)
                 inp = "";
             }
         }
-
-
-        annoyed(client, usern);
+        std::string chan = message.parameters.at(0);
+        std::string usern = message.prefix.nick;
+        //std::string isChanstr = message.parameters[0];
+        //annoyed(client, usern);
         lastusr = usern;
         bool isChannel = chan[0] == '#';
         if (!isChannel)
             chan = usern;
         
+        //selecting and processing called command
         if (act == "shouldi") {
             ShouldiCommand command;
             command.Execute(client, inp, usern, chan);
@@ -396,11 +400,16 @@ int main(int argc, char* argv[])
     rlimit core_limits;
     core_limits.rlim_cur = core_limits.rlim_max = RLIM_INFINITY;
     setrlimit(RLIMIT_CORE, &core_limits);
+    
     char* host = BotConfig::Host;
     int port = BotConfig::Port;
+    
     std::string nick(BotConfig::Nickname);
     std::string user(BotConfig::User);
-    chan = BotConfig::Channel;
+    std::string chan = BotConfig::Channel;
+    std::string sms = "smsFile";
+    std::string desc = "DescribeFile";
+    std::string set = "UserInfoMap";
     
     if (argc >= 4)
         nick = argv[3];
@@ -411,10 +420,7 @@ int main(int argc, char* argv[])
     IRCClient client;
     client.HookIRCCommand("PRIVMSG", &cmds);
     // initialize userinfos from file
-    writeMap(setinfos, setinfoFile);
-    writeMap(describes, descFile);
-    fileToSmsMap(SmsList, smsFile);
-    
+    client.InitData(sms, desc, set);
     client.Debug(true);
     
     // Start the input thread

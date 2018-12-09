@@ -1,11 +1,9 @@
 #include "CustomCommands/SmsCommand.h"
 
-using namespace Global;
 
 typedef std::map<std::string, std::pair<std::string, std::pair<std::string, std::string>>> stringPairMap;
 //(sender, recipient), (message, destination)
 void SmsCommand::Execute(IRCClient* client, std::string input, std::string user, std::string channel) {
-    
     std::string recipient = input.substr(0, input.find(" "));
     if (recipient == "" || input.find(" ") == std::string::npos)
     {
@@ -42,8 +40,8 @@ void SmsCommand::Execute(IRCClient* client, std::string input, std::string user,
     client->SendIRC("PRIVMSG " + channel + " :" + output);
     std::shared_ptr<SmsMessage> letter = std::make_shared<SmsMessage> (sender, destination, message, recipient, timestamp);
     
-    SmsList[recipient].push_back(letter);
-    for (auto &kv : SmsList)
+    client->smsMap[recipient].push_back(letter);
+    for (auto &kv : client->smsMap)
     {
             std::cout << kv.second.front()->recipient << '\n'; 
             for (auto &v : kv.second) {
@@ -54,7 +52,7 @@ void SmsCommand::Execute(IRCClient* client, std::string input, std::string user,
                 
     }
     
-    smsMapToFile(SmsList, smsFile);
+    smsMapToFile(client->smsMap, client->smsFile);
 }
 
 SmsCommand::SmsCommand()

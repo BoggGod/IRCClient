@@ -1,10 +1,9 @@
 #include "CustomCommands/DescCommand.h"
 
-using namespace Global;
-
 typedef std::map<std::string, std::string> stringMap;
 
-void DescCommand::Execute(IRCClient* client, std::string input, std::string user, std::string channel) 
+void DescCommand::Execute(IRCClient* client, std::string input,
+std::string user, std::string channel)
 {
     bool validUser = true;
     std::string target = input.substr(0, input.find(" "));
@@ -24,24 +23,24 @@ void DescCommand::Execute(IRCClient* client, std::string input, std::string user
         if (!validUser) {
             client->SendIRC("PRIVMSG " + channel + " :" + "Sorry, you're not authorized to change descriptions.");
         }else if ((validUser) && (usrInp.find("-clear") != usrInp.npos)) {
-            describes.erase(target);
+            client->descMap.erase(target);
             client->SendIRC("PRIVMSG " + channel + " :" + "Description removed for " + target + ".");
         }else if ((validUser) && (usrInp.find("-append") != usrInp.npos)) {
             ltrim(usrInp);
             eraseSubstr(usrInp, "-append");
-            describes[target] += usrInp;
+            client->descMap[target] += usrInp;
             client->SendIRC("PRIVMSG " + channel + " :" + "Appended to " + target + ".");
         }else{
             ltrim(usrInp);
-            describes[target] = usrInp;
+            client->descMap[target] = usrInp;
             client->SendIRC("PRIVMSG " + channel + " :" + "Added/updated " + target + "'s description.");
         }
     }else{
         
-        std::map<std::string, std::string>::iterator it = describes.find(target);
+        std::map<std::string, std::string>::iterator it = client->descMap.find(target);
         if (target == "-list") {
             std::string outList = "";
-            for (auto &w : describes) {
+            for (auto &w : client->descMap) {
                 if (outList.size() < (outList.max_size() - 200)) {
                 outList += w.first + " ";
                 }else{
@@ -54,14 +53,14 @@ void DescCommand::Execute(IRCClient* client, std::string input, std::string user
             rtrim(outList);
             client->SendIRC("PRIVMSG " + channel + " :" + "Existing descriptions: "
             + outList);
-        }else if (it != describes.end()) {
+        }else if (it != client->descMap.end()) {
             client->SendIRC("PRIVMSG " + channel + " :" + "[" + it->first + 
             "]" + ": " + it->second);
         }else{
             client->SendIRC("PRIVMSG " + channel + " :No descriptions for [" + target + "].");
         }
     }
-    printMap(describes, descFile);
+    printMap(client->descMap, client->descFile);
 }
 
 
