@@ -195,10 +195,33 @@ void annoyed(IRCClient* client, std::string &mischief)
     }
 }
 */
+std::string ParseYouTubeVideoId(std::string text) {
+    std::string result = "";
+    std::regex ytVideoId("(http(s|):|)\/\/(www\.|)yout(.*?)\/(embed\/|watch.*?v=|)([a-z_A-Z0-9\-]{11})");
+    std::smatch matches;
+
+    regex_search(text, matches, ytVideoId);
+    if (matches.size() >= 7) {
+        result = matches[6];
+    }
+
+
+    return result;
+
+}
 
 void cmds(IRCMessage message, IRCClient* client)
 {
     std::string text = message.parameters.at(message.parameters.size() - 1);
+	std::string chan = message.parameters.at(0);
+	std::string usern = message.prefix.nick;
+	//Checking for a youtube video anywhere in the message text
+	std::string videoId = ParseYouTubeVideoId(text);
+	if (videoId  != "") {
+		YouTubeCommand ytCommand = YouTubeCommand();
+		ytCommand.ParseVideoId(videoId, chan, client);
+	}
+
     if ((text[0] == '!') || (text[0] == '.'))
     {
         //initilization of message processing
@@ -224,10 +247,10 @@ void cmds(IRCMessage message, IRCClient* client)
         }
         std::string chan = message.parameters.at(0);
         std::string usern = message.prefix.nick;
-        std::string isChanstr = message.parameters[0];
+        //std::string isChanstr = message.parameters[0];
         //annoyed(client, usern);
         lastusr = usern;
-        bool isChannel = isChanstr[0] == '#';
+        bool isChannel = chan[0] == '#';
         if (!isChannel)
             chan = usern;
         
@@ -317,6 +340,12 @@ void cmds(IRCMessage message, IRCClient* client)
             WatchinCommand command;
             command.Execute(client, inp, usern, chan);
         }
+        if (act == "yt") {
+            YouTubeCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
+		
+
         
         if (act == "namaste") {
             client->SendIRC("PRIVMSG " + chan + " :With the goodness inside, to always be thankful for what we have, and those around of us. To look forward with positive energy, for health and well-being. With this intention, EXU-POLOSION!");
