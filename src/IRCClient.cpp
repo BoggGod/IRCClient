@@ -32,6 +32,16 @@ std::vector<std::string> split(std::string const& text, char sep)
     return tokens;
 }
 
+void IRCClient::InitData(std::string &sms, std::string &d, std::string &set)
+{
+    this->smsFile = sms;
+    this->descFile = d;
+    this->setFile = set;
+    writeMap(this->setMap, this->setFile);
+    writeMap(this->descMap, this->descFile);
+    fileToSmsMap(this->smsMap, this->smsFile);
+}
+    
 bool IRCClient::InitSocket()
 {
     return _socket.Init();

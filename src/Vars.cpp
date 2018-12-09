@@ -1,15 +1,6 @@
 #include "Vars.h"
 namespace Global
 {
-    std::map<std::string, std::vector<std::shared_ptr<SmsMessage>>> SmsList;
-	std::map<std::string, std::string> setinfos;
-    std::map<std::string, std::string> describes;
-    std::vector<std::string> descTargets = {
-        "DrWorm", "Mimizu-Hakase", "Blackie-Chan"
-    };
-    std::string descFile = "DescribeFile";
-    std::string setinfoFile = "UserInfoMap";
-    std::string smsFile = "smsFile";
     std::map<std::string, std::time_t> gamers;
     std::map<std::string, std::time_t> readers;
     std::map<std::string, std::time_t> bikers;

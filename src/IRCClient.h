@@ -20,6 +20,8 @@
 #include <vector>
 #include <list>
 #include "IRCSocket.h"
+#include "Functions.h"
+#include <ctime>
 
 class IRCClient;
 
@@ -78,8 +80,8 @@ class IRCClient
 {
 public:
     IRCClient() : _debug(false) {};
-
     bool InitSocket();
+    void InitData(std::string &sms, std::string &d, std::string &set);
     bool Connect(char* /*host*/, int /*port*/);
     void Disconnect();
     bool Connected() { return _socket.Connected(); };
@@ -110,6 +112,15 @@ public:
 
     void Debug(bool debug) { _debug = debug; };
     
+    std::string _channel;
+    std::string smsFile;
+    std::string descFile;
+    std::string setFile;
+    std::map<std::string, std::vector<std::shared_ptr<SmsMessage>>> smsMap;
+    std::map<std::string, std::string> descMap;
+    std::map<std::string, std::string> setMap;
+    std::vector<std::map<std::string, std::time_t>> flavorVec;    
+
 private:
     void HandleCommand(IRCMessage /*message*/);
     void CallHook(std::string /*command*/, IRCMessage /*message*/);
@@ -121,7 +132,7 @@ private:
    
     std::string _nick;
     std::string _user;
-    std::string _channel;
+
     
     bool _debug;
 };
