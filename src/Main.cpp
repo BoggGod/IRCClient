@@ -116,14 +116,23 @@ void joinCommand(std::string channel, IRCClient* client)
         channel = "#" + channel;
     }
     client->SendIRC("JOIN " + channel);
+    std::chrono::milliseconds timespan(1000);
+    std::this_thread::sleep_for(timespan);
+    std::string code = "\x01";
+    std::string output = code + "ACTION" + " screams";
+    
+    client->SendPrivMsg(channel, output);
 }
 
 void partCommand(std::string channel, IRCClient* client)
 {
     if (channel[0] != '#')
         channel = "#" + channel;
-
-    client->SendIRC("PART " + channel);
+    std::string code = "\x01";
+    std::string output = code + "ACTION" + " screams";
+    
+    client->SendPrivMsg(channel, output);
+    client->SendIRC("PART " + channel + "AHHHHHHHHHH");
 }
 
 void ctcpCommand(std::string arguments, IRCClient* client)
