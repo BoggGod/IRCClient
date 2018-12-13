@@ -12,7 +12,7 @@ class SmsCommand : Command
 public:
     SmsCommand();
     ~SmsCommand();
-    void Execute(IRCClient* client, std::string input, std::string user, std::string channel);
+    virtual void Execute(IRCClient* client, std::string input, std::string user, std::string channel);
 };
 
 #endif

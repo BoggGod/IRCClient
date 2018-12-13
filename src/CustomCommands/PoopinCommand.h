@@ -2,7 +2,7 @@
 #define _PoopinCommand_H
 
 #include "Command.h"
-#include "Vars.h"
+#include <ctime>
 
 class PoopinCommand : Command
 {

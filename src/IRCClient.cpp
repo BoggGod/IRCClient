@@ -40,8 +40,35 @@ void IRCClient::InitData(std::string &sms, std::string &d, std::string &set)
     writeMap(this->setMap, this->setFile);
     writeMap(this->descMap, this->descFile);
     fileToSmsMap(this->smsMap, this->smsFile);
+    this->sixhcycle = std::time(nullptr);
+    this->daystart = std::time(nullptr);
 }
-    
+
+void IRCClient::RefMap(/* void */)
+{
+    std::time_t currtime = std::time(nullptr);
+    for (auto &m : this->flavMap) {
+        for (auto &m2 : m.second) {
+            if (currtime - m2.second >= 43200)
+                m.second.erase(m2.first);
+        }
+    }
+}
+
+void IRCClient::Checktime(/* void */)
+{
+    std::time_t currtime = std::time(nullptr);
+    if (currtime - this->daystart >= 86400)
+        this->daystart = currtime;
+    if (currtime - this->sixhcycle >= 43200) //43200
+    {
+        sixhcycle = currtime;
+        this->RefMap();
+    }
+    return;
+}
+
+
 bool IRCClient::InitSocket()
 {
     return _socket.Init();

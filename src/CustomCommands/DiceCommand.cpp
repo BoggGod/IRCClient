@@ -64,8 +64,9 @@ void DiceCommand::Execute(IRCClient* client, std::string input, std::string user
     if (dubs == 1)
         client->SendPrivMsg(channel, "DUBS!");
     if (dubs == 2) 
-        client->SendPrivMsg(channel, "ＱＵＡＤＳ！");
+        client->SendPrivMsg(channel, "ＴＲＩＰＳ！");
     if (dubs == 3)
+        client->SendPrivMsg(channel, "ＱＵＡＤＳ！");
     if (dubs == 4)
     
     if (result == 420) {

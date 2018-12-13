@@ -21,7 +21,6 @@
 #include <algorithm>
 #include "Thread.h"
 #include "IRCClient.h"
-#include "Vars.h"
 #include <sstream>
 #include <string>
 #include <ctime>
@@ -37,22 +36,8 @@
 #include <sys/resource.h>
 #include <sys/time.h>
 
-using namespace Global;
-
 volatile bool running;
 
-std::string lastusr;
-/*
-std::map<std::string, int> bank;
-std::map<std::string, int> luck;
-std::map<std::string, std::pair<int, double>> loans;
-
-
-//flavor texts
-std::vector<std::pair<std::string, std::string>> insults;
-std::vector<std::pair<std::string, std::string>> leaves;
-
-*/
 void signalHandler(int signal)
 {
     running = false;
@@ -174,27 +159,6 @@ void newday()
 void 
 */
 
-/*std::string say(std::string response)
-{
-    std::string result;
-    result = "PRIVMSG " + chan + " :" + response + "\r\n";
-    return result;
-}
-*/
-
-/*
-void annoyed(IRCClient* client, std::string &mischief)
-{
-    std::string response = "is an elbow muncher.";
-    mischief == lastusr ? ++annoyance : annoyance = 0;
-    if (annoyance >= 6) {
-        client->SendIRC("PRIVMSG " + chan + " :" + mischief + " " + response);
-        annoyance = 0;
-    }else{
-        return;
-    }
-}
-*/
 std::string ParseYouTubeVideoId(std::string text) {
     std::string result = "";
     std::regex ytVideoId("(http(s|):|)\/\/(www\.|)yout(.*?)\/(embed\/|watch.*?v=|)([a-z_A-Z0-9\-]{11})");
@@ -225,7 +189,7 @@ void cmds(IRCMessage message, IRCClient* client)
     if ((text[0] == '!') || (text[0] == '.'))
     {
         //initilization of message processing
-        checktime();
+        client->Checktime();
         std::string act = "";
         std::string inp = "";
         if (text.find(" ") == text.npos)
@@ -248,11 +212,12 @@ void cmds(IRCMessage message, IRCClient* client)
         std::string chan = message.parameters.at(0);
         std::string usern = message.prefix.nick;
         //std::string isChanstr = message.parameters[0];
-        //annoyed(client, usern);
-        lastusr = usern;
         bool isChannel = chan[0] == '#';
         if (!isChannel)
             chan = usern;
+        else
+            client->lastuser = usern;
+        //++client->annoyance;
         
         //selecting and processing called command
         if (act == "shouldi") {
@@ -270,26 +235,22 @@ void cmds(IRCMessage message, IRCClient* client)
             command.Execute(client, inp, usern, chan);
         }
         if (act == "d")
-        {
+        {/*
             if (annoyance >= 6)
             {
                 client->SendIRC("PRIVMSG " + chan + " :" + usern + "?\r\n");
                 annoyance = 0;
             }else{
+                */
                     if (!inp.empty()) {
                         DiceCommand command;
                         command.Execute(client, inp, usern, chan);
                     }
-                }
-        }
-        if (act == "help") {
-            HelpCommand command;
-            command.Execute(client, inp, usern, usern);
         }
         if (act == "ping") {
-                if (annoyance == 6)
+                /*if (annoyance == 6)
                     client->SendIRC("PRIVMSG " + chan + " :Leave me alone..\r\n");
-                else
+                else */
                     client->SendIRC("PRIVMSG " + chan + " :Pong!\r\n");
         }
         if (act == "sms") {
@@ -415,8 +376,6 @@ int main(int argc, char* argv[])
         nick = argv[3];
     if (argc >= 5)
         user = argv[4];
-    sixhcycle = std::time(nullptr);
-    daystart = std::time(nullptr);
     IRCClient client;
     client.HookIRCCommand("PRIVMSG", &cmds);
     // initialize userinfos from file

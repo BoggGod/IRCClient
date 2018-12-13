@@ -36,3 +36,16 @@ bool isNumber(const std::string& s)
     return !s.empty() && std::find_if(s.begin(), 
         s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
 }
+
+bool stringSort(const std::string& lhs, const std::string &rhs)
+{
+    size_t sz = rhs > lhs ? lhs.size() : rhs.size();
+    for (size_t i  = 0; i < sz; ++i)
+    {
+        if (std::tolower(lhs[i]) < std::tolower(rhs[i]))
+            return true;
+        else if (std::tolower(lhs[i]) > std::tolower(rhs[i]))
+            return false;
+    }
+    return true; //totally unneeded
+}

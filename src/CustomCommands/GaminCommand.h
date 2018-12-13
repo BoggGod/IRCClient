@@ -2,7 +2,7 @@
 #define _BikinCommand_H
 
 #include "Command.h"
-#include "Vars.h"
+#include <ctime>
 
 class GaminCommand : Command
 {

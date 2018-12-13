@@ -2,7 +2,7 @@
 #define _SleepinCommand_H
 
 #include "Command.h"
-#include "Vars.h"
+#include <ctime>
 
 class SleepinCommand : Command
 {

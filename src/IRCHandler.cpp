@@ -115,14 +115,18 @@ void IRCClient::HandleChannelJoinPart(IRCMessage message)
     std::string channel = message.parameters.at(0);
     std::string action = message.command == "JOIN" ? "joins" : "leaves";
     std::cout << message.prefix.nick << " " << action << " " << channel << std::endl;
+    
     if ((this->setMap.find(message.prefix.nick) != this->setMap.end()) && (action != "leaves"))
-      SendIRC("PRIVMSG " + channel + " :" + message.prefix.nick + "'s setinfo: " + this->setMap[message.prefix.nick]);
+        SendIRC("PRIVMSG " + channel + " :" + message.prefix.nick + "'s setinfo: " 
+        + this->setMap[message.prefix.nick]);
     if ((this->smsMap.find(message.prefix.nick) != this->smsMap.end()) && (action != "leaves")) {
         std::string smsNum = std::to_string(this->smsMap[message.prefix.nick].size());
         std::string connector = this->smsMap[message.prefix.nick].size() > 1 ? "s" : "";
+        
         SendIRC("PRIVMSG " + channel + " :" + message.prefix.nick + ", you have " +
         smsNum + " new message" + connector + ". I'll probably whisper" + 
         " private messages to you.");
+        
         for (auto &w : this->smsMap[message.prefix.nick]) {
             SendIRC("PRIVMSG " + w->destination + " :" + " From " + 
             w->sender + " \"" + w->message + "\" " + "Received: " + w->timestamp);

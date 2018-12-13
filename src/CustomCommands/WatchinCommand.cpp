@@ -1,37 +1,35 @@
 #include "CustomCommands/WatchinCommand.h"
 
-using namespace Global;
-
 void WatchinCommand::Execute(IRCClient* client, std::string input, std::string user, std::string channel) {
     if (input.find("-clear") != input.npos) {
-        watchers.erase(user);
+        client->flavMap["watchers"].erase(user);
         client->SendIRC("PRIVMSG " + channel + " :" + user +
         ", you have been removed from .watchin");
         return;
     }
-
-    watchers.insert(std::pair<std::string, std::time_t>(user, currtime));
+    std::time_t currtime = std::time(nullptr);
+    client->flavMap["watchers"].insert(std::pair<std::string, std::time_t>(user, currtime));
     std::string out;
     std::string joins;
     std::string ends;
-    if (watchers.size() == 1)
+    if (client->flavMap["watchers"].size() == 1)
     {
-        out = watchers.begin()->first + " is";
+        out = client->flavMap["watchers"].begin()->first + " is";
     }
-    else if (watchers.size() == 2)
+    else if (client->flavMap["watchers"].size() == 2)
     {
-        std::string w2 = std::next(watchers.begin())->first;
-        out = watchers.begin()->first + " and " + w2 + " are";
+        std::string w2 = std::next(client->flavMap["watchers"].begin())->first;
+        out = client->flavMap["watchers"].begin()->first + " and " + w2 + " are";
     }
     else{
-        for (std::map<std::string, std::time_t>::iterator it=watchers.begin(); it!=watchers.end(); ++it)
+        for (std::map<std::string, std::time_t>::iterator it=client->flavMap["watchers"].begin(); it!=client->flavMap["watchers"].end(); ++it)
         {
             ends = " are";
-            if (!(it == std::prev(watchers.end(), 2)))
+            if (!(it == std::prev(client->flavMap["watchers"].end(), 2)))
                 joins = ", ";
             else 
                 joins = " and ";
-            if (it != std::prev(watchers.end()))
+            if (it != std::prev(client->flavMap["watchers"].end()))
                 out += it->first + joins;
             else
                 out += it->first + ends;

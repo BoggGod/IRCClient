@@ -1,36 +1,37 @@
 #include "CustomCommands/DrinkinCommand.h"
 
-using namespace Global;
-
 void DrinkinCommand::Execute(IRCClient* client, std::string input, std::string user, std::string channel) {
     if (input.find("-clear") != input.npos) {
-        drinkers.erase(user);
+        if (client->flavMap.find("drinkers") != client->flavMap.end())
+            client->flavMap["drinkers"].erase(user);
         client->SendIRC("PRIVMSG " + channel + " :" + user +
         ", you have been removed from .drinkin");
         return;
     }
-    drinkers.insert(std::pair<std::string, std::time_t>(user, currtime));
+    
+    std::time_t currtime = std::time(nullptr);
+    client->flavMap["drinkers"].insert(std::pair<std::string, std::time_t>(user, currtime));
     std::string out;
     std::string joins;
     std::string ends;
-    if (drinkers.size() == 1)
+    if (client->flavMap["drinkers"].size() == 1)
     {
-        out = drinkers.begin()->first;
+        out = client->flavMap["drinkers"].begin()->first;
     }
-    else if (drinkers.size() == 2)
+    else if (client->flavMap["drinkers"].size() == 2)
     {
-        std::string w2 = std::next(drinkers.begin())->first;
-        out = drinkers.begin()->first + " and " + w2;
+        std::string w2 = std::next(client->flavMap["drinkers"].begin())->first;
+        out = client->flavMap["drinkers"].begin()->first + " and " + w2;
     }
-    else{
-        for (std::map<std::string, std::time_t>::iterator it=drinkers.begin(); it!=drinkers.end(); ++it)
+    else {
+        for (std::map<std::string, std::time_t>::iterator it=client->flavMap["drinkers"].begin(); it!=client->flavMap["drinkers"].end(); ++it)
         {
             ends = " are";
-            if (!(it == std::prev(drinkers.end(), 2)))
+            if (!(it == std::prev(client->flavMap["drinkers"].end(), 2)))
                 joins = ", ";
             else 
                 joins = " and ";
-            if (it != std::prev(drinkers.end()))
+            if (it != std::prev(client->flavMap["drinkers"].end()))
                 out += it->first + joins;
             else
                 out += it->first + ends;
@@ -38,7 +39,7 @@ void DrinkinCommand::Execute(IRCClient* client, std::string input, std::string u
     }
     
     client->SendIRC("PRIVMSG " + channel + " :" + user + " is hitting the liquor.");
-    std::string addon = (drinkers.size() > 4) ? " Please treat my relatives kindly." : "";
+    std::string addon = (client->flavMap["drinkers"].size() > 4) ? " Please treat my relatives kindly." : "";
     client ->SendIRC("PRIVMSG " + channel + " :Another round for " + out + ". Cheers!" + addon);
 }
 

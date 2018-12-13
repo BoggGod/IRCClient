@@ -7,9 +7,25 @@ void SmsCommand::Execute(IRCClient* client, std::string input, std::string user,
     std::string recipient = input.substr(0, input.find(" "));
     if (recipient == "" || input.find(" ") == std::string::npos)
     {
-        client->SendIRC("PRIVMSG " + channel + " :Here's how this works: "
-        + ".sms <recipient> <message> (optionally '-p' anywhere in the message to make it private)");
-        return;
+        if (client->smsMap.find(user) != client->smsMap.end())
+        {
+            std::string smsNum = std::to_string(client->smsMap[user].size());
+            std::string connector = client->smsMap[user].size() > 1 ? "s" : "";
+            std::string output = user + ", you have " + smsNum + " new message"
+            + connector + ". I'll probably whisper" +
+            " private messages to you.";
+            client->SendPrivMsg(channel, output);
+        
+            for (auto &w : client->smsMap[user]) {
+                client->SendIRC("PRIVMSG " + w->destination + " :" + " From " + 
+                w->sender + " \"" + w->message + "\" " + "Received: " + w->timestamp);
+            }
+            client->smsMap.erase(user);
+            smsMapToFile(client->smsMap, client->smsFile);
+        } else {
+            std::string output = "No new messages.";
+            client->SendPrivMsg(channel, output);
+        }
     }
     std::time_t now = time(0);
     char* dt = ctime(&now);

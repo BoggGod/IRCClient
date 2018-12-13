@@ -1,31 +1,30 @@
 #include "CustomCommands/SmokinCommand.h"
 
-using namespace Global;
-
-void SmokinCommand::Execute(IRCClient* client, std::string input, std::string user, std::string channel) {
-    
-    smokers.insert(std::pair<std::string, std::time_t>(user, currtime));
+void SmokinCommand::Execute(IRCClient* client, std::string input, std::string user, std::string channel) 
+{
+    std::time_t currtime = std::time(nullptr);
+    client->flavMap["smokers"].insert(std::pair<std::string, std::time_t>(user, currtime));
     std::string out;
     std::string joins;
     std::string ends;
-    if (smokers.size() == 1)
+    if (client->flavMap["smokers"].size() == 1)
     {
-        out = smokers.begin()->first + " is";
+        out = client->flavMap["smokers"].begin()->first + " is";
     }
-    else if (smokers.size() == 2)
+    else if (client->flavMap["smokers"].size() == 2)
     {
-        std::string w2 = std::next(smokers.begin())->first;
-        out = smokers.begin()->first + " and " + w2 + " are";
+        std::string w2 = std::next(client->flavMap["smokers"].begin())->first;
+        out = client->flavMap["smokers"].begin()->first + " and " + w2 + " are";
     }
     else{
-        for (std::map<std::string, std::time_t>::iterator it=smokers.begin(); it!=smokers.end(); ++it)
+        for (std::map<std::string, std::time_t>::iterator it=client->flavMap["smokers"].begin(); it!=client->flavMap["smokers"].end(); ++it)
         {
             ends = " are";
-            if (!(it == std::prev(smokers.end(), 2)))
+            if (!(it == std::prev(client->flavMap["smokers"].end(), 2)))
                 joins = ", ";
             else 
                 joins = " and ";
-            if (it != std::prev(smokers.end()))
+            if (it != std::prev(client->flavMap["smokers"].end()))
                 out += it->first + joins;
             else
                 out += it->first + ends;

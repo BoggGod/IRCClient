@@ -2,7 +2,6 @@
 #define _ReadinCommand_H
 
 #include "Command.h"
-#include "Vars.h"
 
 class ReadinCommand : Command
 {

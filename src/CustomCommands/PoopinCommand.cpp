@@ -1,38 +1,38 @@
 #include "CustomCommands/PoopinCommand.h"
 
-using namespace Global;
-
 void PoopinCommand::Execute(IRCClient* client, std::string input, std::string user, std::string channel) {
     if (input.find("-clear") != input.npos) {
-        poopers.erase(user);
+        if (client->flavMap.find("poopers") != client->flavMap.end())
+            client->flavMap["poopers"].erase(user);
         client->SendIRC("PRIVMSG " + channel + " :" + user +
         ", you have been removed from .poopin." +
         " I hope the experience has been palatable.");
         return;
     }
-    poopers.insert(std::pair<std::string, std::time_t>(user, currtime));
+    std::time_t currtime = std::time(nullptr);
+    client->flavMap["poopers"].insert(std::pair<std::string, std::time_t>(user, currtime));
     std::string out;
     std::string joins;
     std::string ends;
     std::string adds;
-    if (poopers.size() == 1)
+    if (client->flavMap["poopers"].size() == 1)
     {
-        out = poopers.begin()->first + " is";
+        out = client->flavMap["poopers"].begin()->first + " is";
     }
-    else if (poopers.size() == 2)
+    else if (client->flavMap["poopers"].size() == 2)
     {
-        std::string w2 = std::next(poopers.begin())->first;
-        out = poopers.begin()->first + " and " + w2 + " are";
+        std::string w2 = std::next(client->flavMap["poopers"].begin())->first;
+        out = client->flavMap["poopers"].begin()->first + " and " + w2 + " are";
     }
-    else{
-        for (std::map<std::string, std::time_t>::iterator it=poopers.begin(); it!=poopers.end(); ++it)
+    else {
+        for (std::map<std::string, std::time_t>::iterator it=client->flavMap["poopers"].begin(); it!=client->flavMap["poopers"].end(); ++it)
         {
             ends = " are";
-            if (!(it == std::prev(poopers.end(), 2)))
+            if (!(it == std::prev(client->flavMap["poopers"].end(), 2)))
                 joins = ", ";
             else 
                 joins = " and ";
-            if (it != std::prev(poopers.end()))
+            if (it != std::prev(client->flavMap["poopers"].end()))
                 out += it->first + joins;
             else
                 out += it->first + ends;
@@ -40,7 +40,7 @@ void PoopinCommand::Execute(IRCClient* client, std::string input, std::string us
 
     }
     client ->SendIRC("PRIVMSG " + channel + " :" + user + " is taking a dump!");
-    if (poopers.size() == 1) {
+    if (client->flavMap["poopers"].size() == 1) {
         client->SendIRC("PRIVMSG " + channel + " :【ＬＥＴ ＩＴ ＡＬＬ ＯＵＴ】");
     }else{
     client ->SendIRC("PRIVMSG " + channel + " :" + out + " taking a collective dump.");

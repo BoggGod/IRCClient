@@ -2,9 +2,9 @@
 #define _DrinkinCommand_H
 
 #include "Command.h"
-#include "Vars.h"
 #include <map>
 #include <iterator>
+#include <ctime>
 
 class DrinkinCommand : Command
 {

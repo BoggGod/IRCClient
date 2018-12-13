@@ -22,6 +22,7 @@
 #include "IRCSocket.h"
 #include "Functions.h"
 #include <ctime>
+#include <map>
 
 class IRCClient;
 
@@ -82,6 +83,8 @@ public:
     IRCClient() : _debug(false) {};
     bool InitSocket();
     void InitData(std::string &sms, std::string &d, std::string &set);
+    void RefMap();
+    void Checktime();
     bool Connect(char* /*host*/, int /*port*/);
     void Disconnect();
     bool Connected() { return _socket.Connected(); };
@@ -112,14 +115,17 @@ public:
 
     void Debug(bool debug) { _debug = debug; };
     
-    std::string _channel;
+    std::time_t sixhcycle;
+    std::time_t daystart;
     std::string smsFile;
     std::string descFile;
     std::string setFile;
     std::map<std::string, std::vector<std::shared_ptr<SmsMessage>>> smsMap;
     std::map<std::string, std::string> descMap;
     std::map<std::string, std::string> setMap;
-    std::vector<std::map<std::string, std::time_t>> flavorVec;    
+    std::map<std::string, std::map<std::string, std::time_t>> flavMap;
+    std::string lastuser; //not used yet
+    //int annoyance;
 
 private:
     void HandleCommand(IRCMessage /*message*/);

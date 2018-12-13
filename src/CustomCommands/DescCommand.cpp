@@ -18,7 +18,7 @@ std::string user, std::string channel)
         client->SendIRC("PRIVMSG " + channel + " :" + "Oh no, you don't!");
         return;
     }
-    if (usrInp != "")
+    if (usrInp != "" && usrInp != " ")
     {
         if (!validUser) {
             client->SendIRC("PRIVMSG " + channel + " :" + "Sorry, you're not authorized to change descriptions.");
@@ -38,21 +38,30 @@ std::string user, std::string channel)
     }else{
         
         std::map<std::string, std::string>::iterator it = client->descMap.find(target);
-        if (target == "-list") {
-            std::string outList = "";
-            for (auto &w : client->descMap) {
-                if (outList.size() < (outList.max_size() - 200)) {
-                outList += w.first + " ";
-                }else{
-                    client->SendIRC("PRIVMSG " + channel +
-                    " :Oops, there are two many descriptions for me to fit into"
-                    + "a single string. Try annoying cesar a bit to give me an update.");
-                    return;
+        if (target == "-list") 
+        {
+            std::vector<std::string> outList;
+            std::size_t msg_size = 30;
+            for (auto i = client->descMap.begin(); i != client->descMap.end()
+                ; ++i) 
+            {
+                if (((std::distance(client->descMap.begin(), i) % msg_size != 0)
+                    || (i == client->descMap.begin()))
+                && (i != std::prev(client->descMap.end()))) 
+                {
+                    outList.push_back(i->first);
+                } else {
+                    outList.push_back(i->first);
+                    sort(outList.begin(), outList.end(),
+                    stringSort);
+                    std::string foutput = "Descriptions: ";
+                    for (auto &w : outList)
+                        foutput += w + " ";
+                    rtrim(foutput);
+                    client->SendPrivMsg(channel, foutput);
+                    outList.clear();
                 }
             }
-            rtrim(outList);
-            client->SendIRC("PRIVMSG " + channel + " :" + "Existing descriptions: "
-            + outList);
         }else if (it != client->descMap.end()) {
             client->SendIRC("PRIVMSG " + channel + " :" + "[" + it->first + 
             "]" + ": " + it->second);
