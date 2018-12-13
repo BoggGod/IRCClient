@@ -21,5 +21,6 @@
 #include "CustomCommands/ListeninCommand.h"
 #include "CustomCommands/DescCommand.h"
 #include "CustomCommands/YouTubeCommand.h"
+#include "CustomCommands/EightBallCommand.h"
 
 #endif

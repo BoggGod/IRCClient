@@ -14,7 +14,6 @@
  */
 
 #include "IRCHandler.h"
-using namespace Global;
 
 IRCCommandHandler ircCommandTable[NUM_IRC_CMDS] =
 {

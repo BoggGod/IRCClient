@@ -257,6 +257,10 @@ void cmds(IRCMessage message, IRCClient* client)
             SmsCommand command;
             command.Execute(client, inp, usern, chan);
         }
+        if (act == "8ball") {
+            EightBallCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
         if (act == "choose") {
             ChooseCommand command;
             command.Execute(client, inp, usern, chan);
