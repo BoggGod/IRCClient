@@ -15,13 +15,13 @@ const std::string &fname)
     const std::string itemDenom = "++";
     std::string user;
     Inventory inv;
-    std::map<std::string, Inventory> readMap;
     int category = 0; //(0 = none, 1 = cookie)
     while (getline(infile, line))
     {
         if (!line.empty() && (line.find(userDenom) != line.npos)) {
-            eraseSubstr(line, seperator);
+            eraseSubstr(line, userDenom);
             user = line;
+            inv.Reset();
             category = 0;
         }
         else if (!line.empty() && (line.find(catDenom) != line.npos)) {
@@ -44,7 +44,7 @@ const std::string &fname)
                     int quantd = std::stoi(quants);
                     //format lines
                     inv.Add("Cookies", cookee, quantd);
-                    readMap[user] = inv;
+                    themap[user] = inv;
                     break;
                 }
             }

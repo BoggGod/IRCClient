@@ -6,6 +6,11 @@ std::string Inventory::Format()
     return output;
 }
 
+void Inventory::Reset()
+{
+    this->cookies.Reset();
+}
+
 void Inventory::Add(const std::string &c, const std::string &i, const int &d)
 {
     if (c == "Cookies")

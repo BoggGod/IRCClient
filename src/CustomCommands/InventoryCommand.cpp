@@ -9,7 +9,7 @@ std::string user, std::string channel)
         client->SendPrivMsg(channel, out);
     } else {
         std::string out = "All your items: ";
-        client->invMap[user].Print("Cookies");
+        out += client->invMap[user].Print("Cookies");
         client->SendPrivMsg(channel, out);
     }
 }

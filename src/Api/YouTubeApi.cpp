@@ -18,7 +18,7 @@ YouTubeApi::~YouTubeApi()
 {
 }
 
-std::string API_KEY = "AIzaSyCnpPqmy_4Xez-jBXWuGsWu_5Q9W4LNuvw";
+std::string API_KEY = "";
 task<http_response> GetYouTubeVideoResponse(std::string videoId){
 	 http_client client(U("https://www.googleapis.com/youtube/v3"));
 

@@ -6,6 +6,7 @@
 #include <fstream>
 #include <cstdio>
 #include <algorithm>
+#include <iostream>
 #include "Functions/Inventory.h"
 
 void SaveInv(std::map<std::string, Inventory> &themap, std::string &fname);

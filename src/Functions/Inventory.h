@@ -17,6 +17,7 @@ public:
     //bool operator<(const Inventory& lhs) const;
 	~Inventory();
     void Add(const std::string &c, const std::string &i, const int &d);
+    void Reset();
     std::string Format();
     std::string Print(const std::string &c);
 

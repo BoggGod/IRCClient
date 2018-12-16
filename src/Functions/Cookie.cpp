@@ -9,6 +9,10 @@ bool Inventory::operator<(const Cookie& lhs) const
     return this.index < lhs.index;
 }
 */
+void Cookie::Reset()
+{
+    this->index.clear();
+}
 
 void Cookie::Add(const std::string &c, const int &d)
 {

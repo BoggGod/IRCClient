@@ -1,7 +1,7 @@
 #ifndef _Cookie_H
 #define _Cookie_H
 
-#include <unordered_map>
+#include <map>
 #include <vector>
 
 class Cookie
@@ -13,10 +13,11 @@ public:
     void Add(const std::string &c, const int &d);
     std::string Print(std::string &s);
     ~Cookie();
+    void Reset();
     
 private:
 
-    std::unordered_map<std::string, int> index;
+    std::map<std::string, int> index;
     /* Members
     double shortbread;
     double sugarCookie;
