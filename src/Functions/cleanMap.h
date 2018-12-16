@@ -4,7 +4,8 @@
 #include <map>
 #include <string>
 #include <iterator>
+#include "Functions/Inventory.h"
 
 void cleanMap(std::map<std::string, std::string> &themap);
-
+void cleanMap(std::map<std::string, Inventory> &themap);
 #endif

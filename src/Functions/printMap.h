@@ -6,7 +6,6 @@
 #include <fstream>
 #include <iostream>
 #include <cstdio>
-#include "Vars.h"
 
 void printMap(std::map<std::string, std::string> &themap, std::string &fname);
 

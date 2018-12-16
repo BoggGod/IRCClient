@@ -9,5 +9,9 @@
 #include "Functions/smsMapToFile.h"
 #include "Functions/cleanSmsMap.h"
 #include "Functions/general.h"
+#include "Functions/Inventory.h"
+#include "Functions/Cookie.h"
+#include "Functions/LoadInv.h"
+#include "Functions/SaveInv.h"
 
 #endif

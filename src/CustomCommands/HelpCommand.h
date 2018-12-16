@@ -2,10 +2,7 @@
 #define _HelpCommand_H 
 
 #include "Command.h"
-#include <vector>
 #include <string>
-#include <iterator>
-#include "Vars.h"
 
 class HelpCommand : Command
 {

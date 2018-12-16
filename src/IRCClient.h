@@ -82,7 +82,8 @@ class IRCClient
 public:
     IRCClient() : _debug(false) {};
     bool InitSocket();
-    void InitData(std::string &sms, std::string &d, std::string &set);
+    void InitData(const std::string &sms, const std::string &d,
+    const std::string &set, const std::string &inv);
     void RefMap();
     void Checktime();
     bool Connect(char* /*host*/, int /*port*/);
@@ -120,10 +121,15 @@ public:
     std::string smsFile;
     std::string descFile;
     std::string setFile;
+    std::string invFile;
     std::map<std::string, std::vector<std::shared_ptr<SmsMessage>>> smsMap;
     std::map<std::string, std::string> descMap;
     std::map<std::string, std::string> setMap;
+    std::map<std::string, Inventory> invMap;
     std::map<std::string, std::map<std::string, std::time_t>> flavMap;
+    const std::vector<std::string> cookieVec = {
+    {"Short Bread"}, {"Sugar Cookie"}, {"Brown Butter Burboun Spice"},
+    {"Lemon Crinkle"}, {"Chestnut Cookie"}, {"Banana Oat"}};
     std::string lastuser; //not used yet
     //int annoyance;
 

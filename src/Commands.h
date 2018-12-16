@@ -3,7 +3,6 @@
 
 #include "Command.h"
 #include "CustomCommands/Setinfo.h"
-#include "Vars.h"
 #include "CustomCommands/ChooseCommand.h"
 #include "CustomCommands/DiceCommand.h"
 #include "CustomCommands/WatchinCommand.h"
@@ -22,5 +21,7 @@
 #include "CustomCommands/DescCommand.h"
 #include "CustomCommands/YouTubeCommand.h"
 #include "CustomCommands/EightBallCommand.h"
+#include "CustomCommands/InventoryCommand.h"
+#include "CustomCommands/CookieCommand.h"
 
 #endif

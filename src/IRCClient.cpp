@@ -32,14 +32,17 @@ std::vector<std::string> split(std::string const& text, char sep)
     return tokens;
 }
 
-void IRCClient::InitData(std::string &sms, std::string &d, std::string &set)
+void IRCClient::InitData(const std::string &sms, const std::string &d,
+const std::string &set, const std::string &inv)
 {
     this->smsFile = sms;
     this->descFile = d;
     this->setFile = set;
+    this->invFile = inv;
     writeMap(this->setMap, this->setFile);
     writeMap(this->descMap, this->descFile);
     fileToSmsMap(this->smsMap, this->smsFile);
+    LoadInv(this->invMap, this->invFile);
     this->sixhcycle = std::time(nullptr);
     this->daystart = std::time(nullptr);
 }

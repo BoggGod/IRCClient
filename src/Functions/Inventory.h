@@ -2,31 +2,28 @@
 #define _Inventory_H
 
 #include <string>
-#include <iostream>
+#include <map>
+#include <stdio.h> 
+#include <stdlib.h>
+#include <time.h> 
+#include <utility>
+#include <string>
+#include "Functions/Cookie.h"
 
-
-class Inventory 
+class Inventory
 {
-friend Cookies::PrintCookies();
-
 public:
     Inventory();
-    Inventory(std::string &send, std::string &dest, std::string &msg, std::string &recip, std::string &tm);
-    std::string PrintInventory() const;
-    for 
-    std::string AddToInventory();
+    //bool operator<(const Inventory& lhs) const;
+	~Inventory();
+    void Add(const std::string &c, const std::string &i, const int &d);
+    std::string Format();
+    std::string Print(const std::string &c);
 
-
-    ~Inventory();
-    
-    Cookies cookies;
-    
-    std::map<
-    std::string destination;
-    std::string message;
-    std::string recipient;
-    std::string timestamp;
+private:
+    Cookie cookies;
 
 };
 
 #endif
+
