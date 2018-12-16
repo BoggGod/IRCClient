@@ -31,8 +31,15 @@ std::string Cookie::Format()
 std::string Cookie::Print(std::string &s)
 {
     std::string ending = " | ";
-    for (auto &i : this->index)
-        s += i.first + " x" + std::to_string(i.second) + ending;
+    for (auto it = this->index.begin(); it != this->index.end();
+    ++it)
+    {
+        if (it != std::prev(this->index.end()))
+            ending = " | ";
+        else
+            ending = "";
+        s += it->first + " x" + std::to_string(it->second) + ending;
+    }
     return s;
 }
 

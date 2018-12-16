@@ -16,6 +16,11 @@ std::string user, std::string channel)
     {
         ltrim(target);
         rtrim(target);
+        if (target == user)
+        {
+            client->SendPrivMsg(channel, "Get your hands *out* of the cookie jar!");
+            return;
+        }
         srand(time(0));
         int sz = client->cookieVec.size();
         std::string cookie = client->cookieVec[rand() % sz];
@@ -30,10 +35,11 @@ std::string user, std::string channel)
         } else {
             client->invMap[target].Add("Cookies", cookie, quant);
         }
+        std::string quantstr = std::to_string(quant);
         std::string out = user + (user.back() == 's' ? "'" : "'s") + 
         " generosity and goodwill has resulted in " 
         + target + (target.back() == 's' ? "'" : "'s") + " acquisition of " +
-        std::to_string(quant) + " " + cookie + "."; 
+        quantstr + " " + cookie + (quant > 1 ? "'s." : "."); 
         client->SendPrivMsg(channel, out);
         
     } else {
