@@ -1,51 +1,19 @@
 ## Simple cross-platform Console IRC Client
 
-Windows | Linux | Azure (Linux/macOS)
-:------------: | :------------: | :------------:
-[![Windows Build status](https://ci.appveyor.com/api/projects/status/pn55ra5fr2c1b6t7?svg=true)](https://ci.appveyor.com/project/fredimachado/ircclient) | [![Linux Build Status](https://travis-ci.org/fredimachado/IRCClient.svg?branch=master)](https://travis-ci.org/fredimachado/IRCClient) | [![Azure Build Status (Linux/macOS)](https://dev.azure.com/FrediMachado/IRCClient/_apis/build/status/fredimachado.IRCClient)](https://dev.azure.com/FrediMachado/IRCClient/_build/latest?definitionId=1)
+Linux
+:------------:
+ [![Linux Build Status](https://travis-ci.org/fredimachado/IRCClient.svg?branch=master)](https://travis-ci.org/fredimachado/IRCClient)
+ 
+This is a fork of Fredimachado's IRCClient.
+We used his IRC Client program as the foundation for a 
+C++ based IRC Bot. The project is focused completely on our
+personal demand for an IRC bot, as well as our desire to 
+play with and improve our understanding of C++ and programming
+in general. Anyone may use it as per the GNU LGPL. But please
+do not expect anything close to polished features at this point. 
 
-- It works on windows and linux (haven't tested on mac)
-- Can be used as an IRC bot
-- It has a simple hook system where you can do whatever you want  when
-  receiving an IRC command.
-- Example in Main.cpp
-
-### Hooking IRC commands:
-First create a function (name it whatever you want) with two arguments, an IRCMessage and a pointer to IRCClient:
-
-```cpp
-void onPrivMsg(IRCMessage message, IRCClient* client)
-{
-    // Check who can "control" us
-    if (message.prefix.nick != "YourNick")
-        return;
-    
-    // received text
-    std::string text = message.parameters.at(message.parameters.size() - 1);
-    
-    if (text == "join #channel")
-        client->SendIRC("JOIN #channel");
-    if (text == "leave #channel")
-        client->SendIRC("PART #channel");
-    if (text == "quit now")
-        client->SendIRC("QUIT");
-}
-```
-
-Then, after you create the IRCClient instance, you can hook it:
-
-```cpp
-IRCClient client;
-
-// Hook PRIVMSG
-client.HookIRCCommand("PRIVMSG", &onPrivMsg);
-```
-
-### Building on windows with Mingw:
-
-- Edit Makefile
-- Replace "-lpthread" with "-lws2_32" (no quotes) in LDFLAGS on line 3.
-- Add ".exe" extension (no quotes) to the EXECUTABLE filename (line 8).
+- It works on ~~windows and~~ linux (haven't tested on mac)
+- Intended to be used as a bot
 
 ## Contribution
 Just send a pull request! :)
