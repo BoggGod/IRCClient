@@ -83,7 +83,7 @@ public:
     IRCClient() : _debug(false) {};
     bool InitSocket();
     void InitData(const std::string &sms, const std::string &d,
-    const std::string &set, const std::string &inv);
+    const std::string &set, const std::string &inv, const std::string &q);
     void RefMap();
     void Checktime();
     bool Connect(char* /*host*/, int /*port*/);
@@ -122,9 +122,11 @@ public:
     std::string descFile;
     std::string setFile;
     std::string invFile;
+    std::string quotes;
     std::map<std::string, std::vector<std::shared_ptr<SmsMessage>>> smsMap;
     std::map<std::string, std::string> descMap;
     std::map<std::string, std::string> setMap;
+    std::vector<std::string> treasure;
     std::map<std::string, Inventory> invMap;
     std::map<std::string, std::map<std::string, std::time_t>> flavMap;
     const std::vector<std::string> cookieVec = {

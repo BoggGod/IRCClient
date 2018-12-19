@@ -229,6 +229,14 @@ void cmds(IRCMessage message, IRCClient* client)
         //++client->annoyance;
         
         //selecting and processing called command
+        if (act == "record") {
+            RecordCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
+        if (act == "quote") {
+            QuoteCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
         if (act == "shouldi") {
             ShouldiCommand command;
             command.Execute(client, inp, usern, chan);
@@ -393,6 +401,7 @@ int main(int argc, char* argv[])
     std::string desc = "DescribeFile";
     std::string set = "UserInfoMap";
     std::string inv = "Inventories";
+    std::string quote = "Quotes";
     
     if (argc >= 4)
         nick = argv[3];
@@ -401,7 +410,7 @@ int main(int argc, char* argv[])
     IRCClient client;
     client.HookIRCCommand("PRIVMSG", &cmds);
     // initialize userinfos from file
-    client.InitData(sms, desc, set, inv); // load inventory via initdata -> inv.init
+    client.InitData(sms, desc, set, inv, quote); // load inventory via initdata -> inv.init
     client.Debug(true);
     
     // Start the input thread

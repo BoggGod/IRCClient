@@ -23,5 +23,8 @@
 #include "CustomCommands/EightBallCommand.h"
 #include "CustomCommands/InventoryCommand.h"
 #include "CustomCommands/CookieCommand.h"
+#include "CustomCommands/QuoteCommand.h"
+#include "CustomCommands/RecordCommand.h"
+
 
 #endif

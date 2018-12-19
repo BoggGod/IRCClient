@@ -13,5 +13,7 @@
 #include "Functions/Cookie.h"
 #include "Functions/LoadInv.h"
 #include "Functions/SaveInv.h"
+#include "Functions/SaveVec.h"
+#include "Functions/LoadVec.h"
 
 #endif
