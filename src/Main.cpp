@@ -233,6 +233,10 @@ void cmds(IRCMessage message, IRCClient* client)
             RecordCommand command;
             command.Execute(client, inp, usern, chan);
         }
+        if (act == "flavor") {
+            FlavorCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
         if (act == "quote") {
             QuoteCommand command;
             command.Execute(client, inp, usern, chan);
@@ -338,7 +342,8 @@ void cmds(IRCMessage message, IRCClient* client)
 
         
         if (act == "namaste") {
-            client->SendIRC("PRIVMSG " + chan + " :With the goodness inside, to always be thankful for what we have, and those around of us. To look forward with positive energy, for health and well-being. With this intention, EXU-POLOSION!");
+            std::string theresponse = client->Response("namaste");
+            client->SendPrivMsg(chan, theresponse);
         }
         //move this to enter a name when starting the program that is admin
         if ((act == "leave") && (usern == "/* not defined yet */")) {
@@ -402,6 +407,7 @@ int main(int argc, char* argv[])
     std::string set = "UserInfoMap";
     std::string inv = "Inventories";
     std::string quote = "Quotes";
+    std::string flavors = "Flavor_lines";
     
     if (argc >= 4)
         nick = argv[3];
@@ -410,7 +416,7 @@ int main(int argc, char* argv[])
     IRCClient client;
     client.HookIRCCommand("PRIVMSG", &cmds);
     // initialize userinfos from file
-    client.InitData(sms, desc, set, inv, quote); // load inventory via initdata -> inv.init
+    client.InitData(sms, desc, set, inv, quote, flavors); // load inventory via initdata -> inv.init
     client.Debug(true);
     
     // Start the input thread

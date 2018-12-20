@@ -38,8 +38,9 @@ void BikinCommand::Execute(IRCClient* client, std::string input, std::string use
         }
 
     }
-    client ->SendIRC("PRIVMSG " + channel + " :" + user + " knows that the road goes ever ever on.");
-    client ->SendIRC("PRIVMSG " + channel + " :" + out + " two wheels good.");
+    std::string finals = user + " knows that the road goes ever ever on. "
+    + out + " " + client->Response("bikin");
+    client->SendPrivMsg(channel, finals);
 }
 
 BikinCommand::BikinCommand()

@@ -37,8 +37,9 @@ void ListeninCommand::Execute(IRCClient* client, std::string input, std::string 
         }
 
     }
-    client->SendIRC("PRIVMSG " + channel + " :" + user + " turns up the volume.");
-    client->SendIRC("PRIVMSG " + channel + " :" + out + " doing an independent study of music appreciation.");
+    std::string finals = user + " turns up the volume. " + out + " "
+    + client->Response("listenin");
+    client->SendPrivMsg(channel, finals);
 }
 
 ListeninCommand::ListeninCommand()

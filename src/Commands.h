@@ -25,6 +25,7 @@
 #include "CustomCommands/CookieCommand.h"
 #include "CustomCommands/QuoteCommand.h"
 #include "CustomCommands/RecordCommand.h"
+#include "CustomCommands/FlavorCommand.h"
 
 
 #endif

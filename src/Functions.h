@@ -15,5 +15,7 @@
 #include "Functions/SaveInv.h"
 #include "Functions/SaveVec.h"
 #include "Functions/LoadVec.h"
+#include "Functions/SaveFlav.h"
+#include "Functions/LoadFlav.h"
 
 #endif

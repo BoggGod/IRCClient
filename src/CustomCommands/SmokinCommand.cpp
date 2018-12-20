@@ -31,8 +31,9 @@ void SmokinCommand::Execute(IRCClient* client, std::string input, std::string us
         }
 
     }
-    client->SendIRC("PRIVMSG " + channel + " :Mmmmmh my favorite.");
-    client->SendIRC("PRIVMSG " + channel + " :" + out + " baked.");
+    std::string finals = user + " is hitting the reefer. " + out + " " +
+    client->Response("smokin");
+    client->SendPrivMsg(channel, finals);
 }
 
 SmokinCommand::SmokinCommand()

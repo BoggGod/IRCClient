@@ -39,12 +39,10 @@ void PoopinCommand::Execute(IRCClient* client, std::string input, std::string us
         }
 
     }
-    client ->SendIRC("PRIVMSG " + channel + " :" + user + " is taking a dump!");
-    if (client->flavMap["poopers"].size() == 1) {
-        client->SendIRC("PRIVMSG " + channel + " :【ＬＥＴ ＩＴ ＡＬＬ ＯＵＴ】");
-    }else{
-    client ->SendIRC("PRIVMSG " + channel + " :" + out + " taking a collective dump.");
-    }
+    std::string funcReturnS = client->Response("poopin");
+    std::string finals = user + " is taking a dump! " + 
+    (client->flavMap["poopers"].size() == 1 ? "【ＬＥＴ ＩＴ ＡＬＬ ＯＵＴ】" : funcReturnS);
+    client->SendPrivMsg(channel, finals);
 }
 
 PoopinCommand::PoopinCommand()

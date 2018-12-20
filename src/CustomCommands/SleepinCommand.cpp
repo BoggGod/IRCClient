@@ -38,8 +38,9 @@ void SleepinCommand::Execute(IRCClient* client, std::string input, std::string u
         }
 
     }
-    client ->SendIRC("PRIVMSG " + channel + " :" + user + " is hitting the hay");
-    client ->SendIRC("PRIVMSG " + channel + " :" + out + " too bloody tired to chat.");
+    std::string finals = user + " is hitting the hay. " + out + " " +
+    client->Response("sleepin");
+    client->SendPrivMsg(channel, finals);
 }
 
 SleepinCommand::SleepinCommand()

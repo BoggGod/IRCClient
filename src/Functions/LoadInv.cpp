@@ -6,7 +6,7 @@ const std::string &fname)
     cleanMap(themap);
     std::ifstream infile(fname);
     if (!infile) {
-        std::cout << "Couldn't open InvFile" << std::endl;
+        // creating new file
     }
     std::string line;
     const std::string seperator = "#|";
@@ -31,7 +31,6 @@ const std::string &fname)
                 category = 1;
             else
                 category = 0;
-            // reading category title (switch to 
         }
         else if (!line.empty()) {
             switch (category) {

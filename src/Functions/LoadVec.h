@@ -7,6 +7,6 @@
 #include <sstream>
 #include <iostream>
 
-void LoadVec(std::vector<std::string> &themap, std::string &fname);
+void LoadVec(std::vector<std::string> &thevec, std::string &fname);
 
 #endif

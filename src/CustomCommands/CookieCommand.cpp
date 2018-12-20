@@ -36,11 +36,15 @@ std::string user, std::string channel)
             client->invMap[target].Add("Cookies", cookie, quant);
         }
         std::string quantstr = std::to_string(quant);
-        std::string out = user + (user.back() == 's' ? "'" : "'s") + 
+        std::string out1 = user + " created" + quantstr + " " + cookie +
+        (quant > 1 ? "'s " : " ") + "for " + target + ".";
+        std::string out2 = user + (user.back() == 's' ? "'" : "'s") + 
         " generosity and goodwill has resulted in " 
         + target + (target.back() == 's' ? "'" : "'s") + " acquisition of " +
-        quantstr + " " + cookie + (quant > 1 ? "'s." : "."); 
-        client->SendPrivMsg(channel, out);
+        quantstr + " " + cookie + (quant > 1 ? "'s." : ".");
+        std::vector<std::string> options = {out1, out2};
+        srand(time(0));
+        client->SendPrivMsg(channel, options[rand() % options.size()]);
         
     } else {
         if (client->invMap.find(user) == client->invMap.end()) {

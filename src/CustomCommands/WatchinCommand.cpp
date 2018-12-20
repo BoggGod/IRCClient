@@ -37,12 +37,14 @@ void WatchinCommand::Execute(IRCClient* client, std::string input, std::string u
 
     }
     std::size_t found = input.find("anime");
+    std::string beg = "";
     if (found != std::string::npos) {
-        client ->SendIRC("PRIVMSG " + channel + " :" + user + " is staring into the glassy 2d eyes.");
+        beg = user + " is staring into the glassy 2d eyes.";
     }else{
-        client ->SendIRC("PRIVMSG " + channel + " :" + user + " turned on the flickerbox.");
+        beg = user + " turned on the flickerbox.";
     }
-    client ->SendIRC("PRIVMSG " + channel + " :" + out + " watching stuff, probably nothing good.");
+    std::string finals = beg + " " + out + " " + client->Response("watchin");
+    client->SendPrivMsg(channel, finals);
 }
 
 WatchinCommand::WatchinCommand()

@@ -83,9 +83,11 @@ public:
     IRCClient() : _debug(false) {};
     bool InitSocket();
     void InitData(const std::string &sms, const std::string &d,
-    const std::string &set, const std::string &inv, const std::string &q);
+    const std::string &set, const std::string &inv, const std::string &q,
+    const std::string &flav);
     void RefMap();
     void Checktime();
+    std::string Response(const std::string &c);
     bool Connect(char* /*host*/, int /*port*/);
     void Disconnect();
     bool Connected() { return _socket.Connected(); };
@@ -122,7 +124,9 @@ public:
     std::string descFile;
     std::string setFile;
     std::string invFile;
+    std::string flavFile;
     std::string quotes;
+    std::map<std::string, std::vector<std::string>> flavs;
     std::map<std::string, std::vector<std::shared_ptr<SmsMessage>>> smsMap;
     std::map<std::string, std::string> descMap;
     std::map<std::string, std::string> setMap;

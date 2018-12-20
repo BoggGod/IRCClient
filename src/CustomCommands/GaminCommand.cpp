@@ -38,8 +38,8 @@ void GaminCommand::Execute(IRCClient* client, std::string input, std::string use
         }
 
     }
-    client ->SendIRC("PRIVMSG " + channel + " :" + user + " wants to play.");
-    client ->SendIRC("PRIVMSG " + channel + " :" + out + " escaping from reality into vidya games.");
+    std::string finals = user + " wants to play. " + out + " " + client->Response("gamin");
+    client->SendPrivMsg(channel, finals);
 }
 
 GaminCommand::GaminCommand()

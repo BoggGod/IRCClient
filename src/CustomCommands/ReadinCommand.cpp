@@ -38,8 +38,9 @@ void ReadinCommand::Execute(IRCClient* client, std::string input, std::string us
         }
 
     }
-    client ->SendIRC("PRIVMSG " + channel + " :" + user + " forgot to bookmark the page.");
-    client ->SendIRC("PRIVMSG " + channel + " :" + out + " nose-deep in a tome of their choosing.");
+    std::string finals = user + " forgot to bookmark the page. " +  out + " " +
+    client->Response("readin");
+    client->SendPrivMsg(channel, finals);
 }
 
 ReadinCommand::ReadinCommand()

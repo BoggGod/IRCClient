@@ -6,7 +6,7 @@ void RecordCommand::Execute(IRCClient* client, std::string input, std::string us
         client->SendPrivMsg(channel, "Use .record to record a message, and .quote to grab one to display.");
     } else {
         client->treasure.push_back(input);
-        client->SendPrivMsg(channel, "Words of wisdom for the young?");
+        client->SendPrivMsg(channel, client->Response("record"));
         SaveVec(client->treasure, client->quotes);
     }
 }

@@ -37,10 +37,9 @@ void DrinkinCommand::Execute(IRCClient* client, std::string input, std::string u
                 out += it->first + ends;
         }
     }
-    
-    client->SendIRC("PRIVMSG " + channel + " :" + user + " is hitting the liquor.");
-    std::string addon = (client->flavMap["drinkers"].size() > 4) ? " Please treat my relatives kindly." : "";
-    client ->SendIRC("PRIVMSG " + channel + " :Another round for " + out + ". Cheers!" + addon);
+    std::string finals = user + " is hitting the liquor." +
+    " Another round for " + out + ". Cheers!";
+    client ->SendPrivMsg(channel, finals);
 }
 
 DrinkinCommand::DrinkinCommand()
