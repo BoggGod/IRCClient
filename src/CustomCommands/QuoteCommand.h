@@ -6,6 +6,8 @@
 #include <vector>
 #include <time.h>
 #include <stdlib.h>
+#include "Functions/general.h"
+#include "Functions/SaveVec.h"
 
 class QuoteCommand : Command
 {
