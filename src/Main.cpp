@@ -229,15 +229,11 @@ void cmds(IRCMessage message, IRCClient* client)
         //++client->annoyance;
         
         //selecting and processing called command
-        if (act == "record") {
-            RecordCommand command;
-            command.Execute(client, inp, usern, chan);
-        }
         if (act == "flavor") {
             FlavorCommand command;
             command.Execute(client, inp, usern, chan);
         }
-        if (act == "quote") {
+        if (act == "quote" || act == "record") {
             QuoteCommand command;
             command.Execute(client, inp, usern, chan);
         }

@@ -23,6 +23,8 @@
 #include "Functions.h"
 #include <ctime>
 #include <map>
+#include <chrono>
+#include <thread>
 
 class IRCClient;
 
@@ -118,6 +120,7 @@ public:
 
     void Debug(bool debug) { _debug = debug; };
     
+    std::time_t last_post;
     std::time_t sixhcycle;
     std::time_t daystart;
     std::string smsFile;
@@ -126,6 +129,7 @@ public:
     std::string invFile;
     std::string flavFile;
     std::string quotes;
+    std::map<std::string, std::time_t> last_set;
     std::map<std::string, std::vector<std::string>> flavs;
     std::map<std::string, std::vector<std::shared_ptr<SmsMessage>>> smsMap;
     std::map<std::string, std::string> descMap;

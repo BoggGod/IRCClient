@@ -6,7 +6,7 @@ void QuoteCommand::Execute(IRCClient* client, std::string input, std::string use
     if (input == "" || input == " ") {
         srand(time(0));
         int i = (rand() % client->treasure.size());
-        std::string output = "\"" + client->treasure[i] + "\"";
+        std::string output = client->treasure[i];
         client->SendPrivMsg(channel, output);
     } else {
         client->treasure.push_back(input);

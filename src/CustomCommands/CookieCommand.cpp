@@ -36,8 +36,8 @@ std::string user, std::string channel)
             client->invMap[target].Add("Cookies", cookie, quant);
         }
         std::string quantstr = std::to_string(quant);
-        std::string out1 = user + " created" + quantstr + " " + cookie +
-        (quant > 1 ? "'s " : " ") + "for " + target + ".";
+        std::string out1 = user + " created " + quantstr + " " + cookie +
+        (quant > 1 ? "s " : " ") + "for " + target + ".";
         std::string out2 = user + (user.back() == 's' ? "'" : "'s") + 
         " generosity and goodwill has resulted in " 
         + target + (target.back() == 's' ? "'" : "'s") + " acquisition of " +

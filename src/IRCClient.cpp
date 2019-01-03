@@ -36,6 +36,7 @@ void IRCClient::InitData(const std::string &sms, const std::string &d,
 const std::string &set, const std::string &inv, const std::string &q,
 const std::string &flav)
 {
+    this->last_post = std::time(nullptr);
     this->smsFile = sms;
     this->descFile = d;
     this->setFile = set;
@@ -101,7 +102,14 @@ void IRCClient::Disconnect()
 
 bool IRCClient::SendIRC(std::string data)
 {
+    std::time_t curr = std::time(nullptr);
+    if (curr < (this->last_post + 2))
+    {
+        auto waitt = 1000 - (curr - last_post); 
+        std::this_thread::sleep_for(std::chrono::milliseconds(waitt));
+    }
     data.append("\n");
+    this->last_post = std::time(nullptr);
     return _socket.SendData(data.c_str());
 }
 
