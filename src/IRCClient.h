@@ -86,7 +86,7 @@ public:
     bool InitSocket();
     void InitData(const std::string &sms, const std::string &d,
     const std::string &set, const std::string &inv, const std::string &q,
-    const std::string &flav);
+    const std::string &flav, const std::string &set2, const std::string &d2);
     void RefMap();
     void Checktime();
     std::string Response(const std::string &c);
@@ -125,7 +125,9 @@ public:
     std::time_t daystart;
     std::string smsFile;
     std::string descFile;
+    std::string descFile2;
     std::string setFile;
+    std::string setFile2;
     std::string invFile;
     std::string flavFile;
     std::string quotes;
@@ -133,7 +135,9 @@ public:
     std::map<std::string, std::vector<std::string>> flavs;
     std::map<std::string, std::vector<std::shared_ptr<SmsMessage>>> smsMap;
     std::map<std::string, std::string> descMap;
+    std::map<std::string, std::string> descMap2;
     std::map<std::string, std::string> setMap;
+    std::map<std::string, std::string> setMap2;
     std::vector<std::string> treasure;
     std::map<std::string, Inventory> invMap;
     std::map<std::string, std::map<std::string, std::time_t>> flavMap;

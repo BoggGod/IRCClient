@@ -23,15 +23,27 @@ std::string user, std::string channel)
         if (!validUser) {
             client->SendIRC("PRIVMSG " + channel + " :" + "Sorry, you're not authorized to change descriptions.");
         }else if ((validUser) && (usrInp.find("-clear") != usrInp.npos)) {
+            client->descMap2[target] = client->descMap[target];
             client->descMap.erase(target);
             client->SendIRC("PRIVMSG " + channel + " :" + "Description removed for " + target + ".");
         }else if ((validUser) && (usrInp.find("-append") != usrInp.npos)) {
             ltrim(usrInp);
             eraseSubstr(usrInp, "-append");
+            client->descMap2[target] = client->descMap[target];
             client->descMap[target] += usrInp;
             client->SendIRC("PRIVMSG " + channel + " :" + "Appended to " + target + ".");
+        }else if ((validUser) && (usrInp.find("-restore") != usrInp.npos)) {
+            if (!client->descMap2[target].empty()) {
+                std::string tempstr = client->descMap[target];
+                client->descMap[target] = client->descMap2[target];
+                client->descMap2[target] = tempstr;
+                client->SendIRC("PRIVMSG " + channel + " :" + "Restored " + target + "'s description to previous entry.");
+            }else{
+                client->SendIRC("PRIVMSG " + channel + " :" + "There is no previous entry for this description. Use -clear if you want to remove the existing one.");
+            }
         }else{
             ltrim(usrInp);
+            client->descMap2[target] = client->descMap[target];
             client->descMap[target] = usrInp;
             client->SendIRC("PRIVMSG " + channel + " :" + "Added/updated " + target + "'s description.");
         }
@@ -70,6 +82,7 @@ std::string user, std::string channel)
         }
     }
     printMap(client->descMap, client->descFile);
+    printMap(client->descMap2, client->descFile2);
 }
 
 

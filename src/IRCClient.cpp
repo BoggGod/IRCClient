@@ -34,17 +34,21 @@ std::vector<std::string> split(std::string const& text, char sep)
 
 void IRCClient::InitData(const std::string &sms, const std::string &d,
 const std::string &set, const std::string &inv, const std::string &q,
-const std::string &flav)
+const std::string &flav, const std::string &set2, const std::string &d2)
 {
     this->last_post = std::time(nullptr);
     this->smsFile = sms;
     this->descFile = d;
+    this->descFile2 = d2;
     this->setFile = set;
+    this->setFile = set2;
     this->invFile = inv;
     this->quotes = q;
     this->flavFile = flav;
     writeMap(this->setMap, this->setFile);
+    writeMap(this->setMap2, this->setFile2);
     writeMap(this->descMap, this->descFile);
+    writeMap(this->descMap2, this->descFile2);
     fileToSmsMap(this->smsMap, this->smsFile);
     LoadFlav(this->flavs, this->flavFile);
     LoadInv(this->invMap, this->invFile);

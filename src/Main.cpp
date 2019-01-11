@@ -306,7 +306,7 @@ void cmds(IRCMessage message, IRCClient* client)
             PoopinCommand command;
             command.Execute(client, inp, usern, chan);
         }
-        if (act == "gamin") {
+        if (act == "gamin" || act == "playin") {
             GaminCommand command;
             command.Execute(client, inp, usern, chan);
         }
@@ -400,7 +400,9 @@ int main(int argc, char* argv[])
     std::string chan = BotConfig::Channel;
     std::string sms = "smsFile";
     std::string desc = "DescribeFile";
+    std::string desc2 = "DescribeBackup";
     std::string set = "UserInfoMap";
+    std::string set2 = "UserInfoBackup";
     std::string inv = "Inventories";
     std::string quote = "Quotes";
     std::string flavors = "Flavor_lines";
@@ -412,7 +414,7 @@ int main(int argc, char* argv[])
     IRCClient client;
     client.HookIRCCommand("PRIVMSG", &cmds);
     // initialize userinfos from file
-    client.InitData(sms, desc, set, inv, quote, flavors); // load inventory via initdata -> inv.init
+    client.InitData(sms, desc, set, inv, quote, flavors, set2, desc2); // load inventory via initdata -> inv.init
     client.Debug(true);
     
     // Start the input thread
