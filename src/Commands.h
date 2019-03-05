@@ -25,6 +25,9 @@
 #include "CustomCommands/CookieCommand.h"
 #include "CustomCommands/QuoteCommand.h"
 #include "CustomCommands/FlavorCommand.h"
+#include "CustomCommands/DykCommand.h"
+#include "CustomCommands/WotdCommand.h"
+#include "CustomCommands/NomminCommand.h"
 
 
 #endif

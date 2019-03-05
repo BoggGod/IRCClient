@@ -15,6 +15,7 @@
 #include <time.h>
 #include <iostream>
 #include <fstream>
+#include <cctype>
 #include <signal.h>
 #include <cstdlib>
 #include <map>
@@ -119,7 +120,7 @@ void joinCommand(std::string channel, IRCClient* client)
     std::chrono::milliseconds timespan(1000);
     std::this_thread::sleep_for(timespan);
     std::string code = "\x01";
-    std::string output = code + "ACTION" + " screams";
+    std::string output = code + "ACTION" + " screams" + code;
     
     client->SendPrivMsg(channel, output);
 }
@@ -185,14 +186,19 @@ std::string ParseYouTubeVideoId(std::string text) {
 
 void cmds(IRCMessage message, IRCClient* client)
 {
+    client->Spamcheck();
+    if (client->spamflag)
+        return;
     std::string text = message.parameters.at(message.parameters.size() - 1);
 	std::string chan = message.parameters.at(0);
 	std::string usern = message.prefix.nick;
 	//Checking for a youtube video anywhere in the message text
 	std::string videoId = ParseYouTubeVideoId(text);
+    
 	if (videoId  != "") {
 		YouTubeCommand ytCommand = YouTubeCommand();
 		ytCommand.ParseVideoId(videoId, chan, client);
+
 	}
 
     if ((text[0] == '!') || (text[0] == '.'))
@@ -205,12 +211,18 @@ void cmds(IRCMessage message, IRCClient* client)
         {
             try {
                 act = text.substr(1);
+                std::transform(act.begin(), act.end(), act.begin(),
+                [](unsigned char c){ return std::tolower(c); }
+                );
             }
                 catch (const std::out_of_range& oor) {
                     act = "";
                 }
         } else {
             act = text.substr(1, text.find(" ") - 1);
+            std::transform(act.begin(), act.end(), act.begin(),
+            [](unsigned char c){ return std::tolower(c); }
+            );
             try {
                 inp = text.substr(text.find(" ") + 1);
             }
@@ -251,6 +263,17 @@ void cmds(IRCMessage message, IRCClient* client)
             DescCommand command;
             command.Execute(client, inp, usern, chan);
         }
+        /*if (act == "wotd")
+        {
+            WotdCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
+        if (act == "dyk")
+        {
+            DykCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
+        */
         if (act == "d")
         {/*
             if (annoyance >= 6)
@@ -308,6 +331,10 @@ void cmds(IRCMessage message, IRCClient* client)
         }
         if (act == "gamin" || act == "playin") {
             GaminCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
+        if (act == "nommin" || act == "nomin") {
+            NomminCommand command;
             command.Execute(client, inp, usern, chan);
         }
         if (act == "bikin") {

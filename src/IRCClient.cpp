@@ -52,6 +52,8 @@ const std::string &flav, const std::string &set2, const std::string &d2)
     fileToSmsMap(this->smsMap, this->smsFile);
     LoadFlav(this->flavs, this->flavFile);
     LoadInv(this->invMap, this->invFile);
+    LoadVec(this->wotds, this->wotdsFile);
+    LoadVec(this->dyks, this->dyksFile);
     LoadVec(this->treasure, this->quotes);
     this->sixhcycle = std::time(nullptr);
     this->daystart = std::time(nullptr);
@@ -88,6 +90,17 @@ void IRCClient::Checktime(/* void */)
     return;
 }
 
+void IRCClient::Spamcheck(/* void */)
+{
+    std::time_t current_time = std::time(nullptr);
+    std::time_t time_passed = current_time - this->last_post;
+    if (time_passed < 1)
+        this->spamflag = true;
+    else
+        this->spamflag = false;
+    this->last_post = current_time;
+}
+
 
 bool IRCClient::InitSocket()
 {
@@ -106,14 +119,7 @@ void IRCClient::Disconnect()
 
 bool IRCClient::SendIRC(std::string data)
 {
-    std::time_t curr = std::time(nullptr);
-    if (curr < (this->last_post + 2))
-    {
-        auto waitt = 1000 - (curr - last_post); 
-        std::this_thread::sleep_for(std::chrono::milliseconds(waitt));
-    }
     data.append("\n");
-    this->last_post = std::time(nullptr);
     return _socket.SendData(data.c_str());
 }
 

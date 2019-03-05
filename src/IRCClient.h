@@ -87,6 +87,7 @@ public:
     void InitData(const std::string &sms, const std::string &d,
     const std::string &set, const std::string &inv, const std::string &q,
     const std::string &flav, const std::string &set2, const std::string &d2);
+    void Spamcheck();
     void RefMap();
     void Checktime();
     std::string Response(const std::string &c);
@@ -121,6 +122,7 @@ public:
     void Debug(bool debug) { _debug = debug; };
     
     std::time_t last_post;
+    bool spamflag;
     std::time_t sixhcycle;
     std::time_t daystart;
     std::string smsFile;
@@ -131,6 +133,8 @@ public:
     std::string invFile;
     std::string flavFile;
     std::string quotes;
+    std::string dyksFile = "dyks";
+    std::string wotdsFile = "wotds";
     std::map<std::string, std::time_t> last_set;
     std::map<std::string, std::vector<std::string>> flavs;
     std::map<std::string, std::vector<std::shared_ptr<SmsMessage>>> smsMap;
@@ -138,11 +142,13 @@ public:
     std::map<std::string, std::string> descMap2;
     std::map<std::string, std::string> setMap;
     std::map<std::string, std::string> setMap2;
+    std::vector<std::string> dyks;
+    std::vector<std::string> wotds;
     std::vector<std::string> treasure;
     std::map<std::string, Inventory> invMap;
     std::map<std::string, std::map<std::string, std::time_t>> flavMap;
     const std::vector<std::string> cookieVec = {
-    {"Short Bread"}, {"Sugar Cookie"}, {"Brown Butter Burboun Spice"},
+    {"Short Bread"}, {"Sugar Cookie"}, {"Brown Butter Bourboun Spice"},
     {"Lemon Crinkle"}, {"Chestnut Cookie"}, {"Banana Oat"}};
     std::string lastuser; //not used yet
     //int annoyance;

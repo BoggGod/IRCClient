@@ -39,7 +39,7 @@ void PoopinCommand::Execute(IRCClient* client, std::string input, std::string us
         }
 
     }
-    std::string funcReturnS = client->Response("poopin");
+    std::string funcReturnS = out + client->Response("poopin");
     std::string finals = user + " is taking a dump! " + 
     (client->flavMap["poopers"].size() == 1 ? "【ＬＥＴ ＩＴ ＡＬＬ ＯＵＴ】" : funcReturnS);
     client->SendPrivMsg(channel, finals);

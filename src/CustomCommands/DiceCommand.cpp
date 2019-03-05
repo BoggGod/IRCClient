@@ -6,17 +6,25 @@ void DiceCommand::Execute(IRCClient* client, std::string input, std::string user
     int result = 0;
     std::string rresult = "";
     int dubs = 0;
-    std::regex multi {"\\d+d\\d*"};
+    
+    
+   // std::regex multi {"[0-9][0-9][0-9]"};
     trans >> x;
 
-    if (((!trans.fail()) && (x > 0)) && (!std::regex_match (input, multi))) 
+    // simple throw
+    if ((!trans.fail()) && (x > 0)) //&& (!std::regex_match (input, multi))) 
     {
         x = round(x);
         srand(time(0));
         result = (1+(rand()%x));
-        std::string rresult = std::to_string(result);
-        std::string output = user + " has rolled a " + rresult + ".";
+        rresult = std::to_string(result);
+        std::string grammar = "a ";
+        if (rresult[0] == '8')
+            grammar = "an ";
+        std::string output = user + " has rolled " + grammar + rresult + ".";
         client->SendPrivMsg(channel, output);
+    // regex logic
+    /*
     }else if (std::regex_match (input, multi)) 
     {
         std::string::size_type sz = 1;
@@ -39,23 +47,31 @@ void DiceCommand::Execute(IRCClient* client, std::string input, std::string user
         for (int i = 0; i != dies; ++i) {
             srand(time(0));
             if (!((result + faces) >= 2147483647)) {
-                result+= (1+(rand()%faces));
+                result += (1+(rand()%faces));
             }else{
                 client->SendIRC("PRIVMSG " + channel + " :" + "TOO BIG!");
                 return;
             }
         }
         rresult = std::to_string(result);
+        std::string grammar = "a ";
+        if (rresult[0] == '8')
+            grammar = "an ";
         client->SendIRC("PRIVMSG " + channel + " :" +
         user + " has thrown " + std::to_string(dies) + " die" +
-        " with " + std::to_string(faces) + " faces each, rolling a " +
-        rresult + "!");
+        " with " + std::to_string(faces) + " faces each, rolling "
+        + grammar + rresult + "!");
+      */
+    
+    // invalid input part
     }else if ((trans.fail()) || (x <= 0))
     {
     trans.clear();
     trans.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
     client->SendPrivMsg(channel, user + ", fuck you!");
     }
+    
+    // dubs determination
     for (auto it = rresult.rbegin(); it != rresult.rend(); ++it)
     {
         if (*it == *(it+1))

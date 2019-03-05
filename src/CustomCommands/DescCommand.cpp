@@ -18,7 +18,20 @@ std::string user, std::string channel)
         client->SendIRC("PRIVMSG " + channel + " :" + "Oh no, you don't!");
         return;
     }
-    if (usrInp != "" && usrInp != " ")
+    std::string appStr = "";
+    bool appFlag = false;
+    if (usrInp.find("-append")) {
+        appFlag = true;
+        appStr = "-append";
+    }else if (usrInp.find("+=")) {
+        appFlag = true;
+        appStr = "+=";
+    }else if (usrInp.find("=+")) {
+        appFlag = true;
+        appStr = "=+";
+    }
+        
+    if ((usrInp != "" && usrInp != " ") && ( target != " " && target != "" ))
     {
         if (!validUser) {
             client->SendIRC("PRIVMSG " + channel + " :" + "Sorry, you're not authorized to change descriptions.");
@@ -26,9 +39,9 @@ std::string user, std::string channel)
             client->descMap2[target] = client->descMap[target];
             client->descMap.erase(target);
             client->SendIRC("PRIVMSG " + channel + " :" + "Description removed for " + target + ".");
-        }else if ((validUser) && (usrInp.find("-append") != usrInp.npos)) {
+        }else if (validUser && appFlag) {
             ltrim(usrInp);
-            eraseSubstr(usrInp, "-append");
+            eraseSubstr(usrInp, appStr);
             client->descMap2[target] = client->descMap[target];
             client->descMap[target] += usrInp;
             client->SendIRC("PRIVMSG " + channel + " :" + "Appended to " + target + ".");
