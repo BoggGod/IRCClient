@@ -20,17 +20,16 @@ std::string user, std::string channel)
     }
     std::string appStr = "";
     bool appFlag = false;
-    if (usrInp.find("-append")) {
+    if (usrInp.find("-append") != usrInp.npos) {
         appFlag = true;
         appStr = "-append";
-    }else if (usrInp.find("+=")) {
+    }else if (usrInp.find("+=") != usrInp.npos) {
         appFlag = true;
         appStr = "+=";
-    }else if (usrInp.find("=+")) {
+    }else if (usrInp.find("=+") != usrInp.npos) {
         appFlag = true;
         appStr = "=+";
     }
-        
     if ((usrInp != "" && usrInp != " ") && ( target != " " && target != "" ))
     {
         if (!validUser) {
