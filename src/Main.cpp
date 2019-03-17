@@ -111,7 +111,7 @@ void msgCommand(std::string arguments, IRCClient* client)
     client->SendIRC("PRIVMSG " + to + " :" + text);
 };
 
-void joinCommand(std::string channel, IRCClient* client)
+void joinCommand(std::string channel, IRCClient* client) //does work
 {
     if (channel[0] != '#') {
         channel = "#" + channel;
@@ -125,7 +125,7 @@ void joinCommand(std::string channel, IRCClient* client)
     client->SendPrivMsg(channel, output);
 }
 
-void partCommand(std::string channel, IRCClient* client)
+void partCommand(std::string channel, IRCClient* client) //doesn't appear to work, just parts.
 {
     if (channel[0] != '#')
         channel = "#" + channel;
@@ -261,6 +261,16 @@ void cmds(IRCMessage message, IRCClient* client)
         if (act == "desc")
         {
             DescCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
+        if (act == "wah")
+        {
+            WahCommand command;
+            command.Execute(client, inp, usern, chan);
+        }
+        if (act == "cat")
+        {
+            CatCommand command;
             command.Execute(client, inp, usern, chan);
         }
         /*if (act == "wotd")

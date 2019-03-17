@@ -134,6 +134,7 @@ public:
     std::string flavFile;
     std::string quotes;
     std::string dyksFile = "dyks";
+    std::string wahsFile = "wahs";
     std::string wotdsFile = "wotds";
     std::map<std::string, std::time_t> last_set;
     std::map<std::string, std::vector<std::string>> flavs;
@@ -143,6 +144,7 @@ public:
     std::map<std::string, std::string> setMap;
     std::map<std::string, std::string> setMap2;
     std::vector<std::string> dyks;
+    std::vector<std::string> wahs;
     std::vector<std::string> wotds;
     std::vector<std::string> treasure;
     std::map<std::string, Inventory> invMap;

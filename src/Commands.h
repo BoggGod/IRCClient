@@ -28,6 +28,8 @@
 #include "CustomCommands/DykCommand.h"
 #include "CustomCommands/WotdCommand.h"
 #include "CustomCommands/NomminCommand.h"
+#include "CustomCommands/WahCommand.h"
+#include "CustomCommands/CatCommand.h"
 
 
 #endif

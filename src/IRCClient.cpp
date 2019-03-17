@@ -54,6 +54,7 @@ const std::string &flav, const std::string &set2, const std::string &d2)
     LoadInv(this->invMap, this->invFile);
     LoadVec(this->wotds, this->wotdsFile);
     LoadVec(this->dyks, this->dyksFile);
+    LoadVec(this->wahs, this->wahsFile);
     LoadVec(this->treasure, this->quotes);
     this->sixhcycle = std::time(nullptr);
     this->daystart = std::time(nullptr);
