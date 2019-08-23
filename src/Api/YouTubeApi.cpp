@@ -70,19 +70,20 @@ task<YouTubeSearchResult> YouTubeApi::SearchYouTube(std::string query) {
             {
                 int responseCode =  response.status_code();
                 printf("Received response status code:%u\n", responseCode);
-				if(responseCode != 200){
-					cancel_current_task();
-				}
+                if(responseCode != 200){
+                    cancel_current_task();
+                }
+
                 return response.extract_json();
             }).then([=](web::json::value jsonValue) {
                 web::json::object& obj = jsonValue.as_object();
-				auto items = obj["items"];
+                auto items = obj["items"];
 
-				if (items.size() == 0) {
-					cancel_current_task();
-				}
-					
-				auto itemsArray = items.as_array();
+                if (items.size() == 0) {
+                    cancel_current_task();
+                }
+                    
+                auto itemsArray = items.as_array();
 
 
                 this->PopulateYouTubeResultFromSnippetJSON(itemsArray, result);
